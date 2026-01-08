@@ -1,22 +1,26 @@
 import coworking from "../assets/cards/coworking.jpg";
 import coliving from "../assets/cards/coliving.jpg";
 import virtual from "../assets/cards/virtual.jpg";
+import { Link } from "react-router-dom";
 
 const cards = [
   {
     title: "Coworking",
     subtitle: "Spaces",
     image: coworking,
+     path: "/coworking",
   },
   {
     title: "Coliving",
     subtitle: "Spaces",
     image: coliving,
+     path: "/coliving",
   },
   {
     title: "Virtual",
     subtitle: "Offices",
-    image: virtual,
+    image: virtual, 
+     path: "/virtual-office",
   },
 ];
 
@@ -26,8 +30,9 @@ export default function Categories() {
       <div className="max-w-7xl mx-auto px-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
           {cards.map((card, index) => (
-            <div
+            <Link
               key={index}
+              to={card.path}
               className="relative h-[180px] rounded-2xl overflow-hidden group cursor-pointer"
             >
               <img
@@ -47,7 +52,7 @@ export default function Categories() {
                   <span className="font-semibold">{card.subtitle}</span>
                 </h3>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

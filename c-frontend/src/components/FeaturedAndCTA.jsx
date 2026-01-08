@@ -39,8 +39,6 @@ export default function FeaturedAndCTA() {
               Featured Coworking
             </h2>
           </div>
-
-          {/* Logos */}
           <div className="flex flex-wrap items-center justify-center gap-10">
             {logos.map((logo, i) => (
               <img
@@ -61,7 +59,6 @@ export default function FeaturedAndCTA() {
 
           <div className="relative bg-[#FFF7E6] rounded-3xl overflow-hidden flex flex-col md:flex-row">
 
-            {/* LEFT CONTENT */}
             <div className="p-10 md:w-1/2">
               <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
                 Book Your Virtual Office{" "}
@@ -112,7 +109,7 @@ export default function FeaturedAndCTA() {
 
             </div>
 
-            {/* RIGHT IMAGE */}
+           
             <div className="md:w-1/2">
               <img
                 src={officeImg}

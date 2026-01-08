@@ -1,10 +1,19 @@
-import heroImg from "../assets/hero1.jpg";
+import { useNavigate } from "react-router-dom";
 
 
 
-export default function Hero() {
-  const cities = ["Gurugram", "Noida", "Greater Noida", "Delhi"];
-
+export default function Hero({
+  title,
+  highlight,
+  subtitle,
+   subtitleColor,
+  image,
+   enableCityPopup = false,
+  onCityClick = () => {},
+    mode = "home",
+}) {
+  const cities = ["Gurgaon", "Noida", "Greater Noida", "Delhi"];
+const navigate = useNavigate();
   return (
     <section className="bg-white min-h-[610px] overflow-hidden relative">
 
@@ -15,13 +24,22 @@ export default function Hero() {
         
           <div className="w-full md:w-1/2 pt-32">
             <h1 className=" text-4xl md:text-6xl font-bold text-gray-900 leading-tight">
-              Choose from <span className="text-yellow-400">1000+</span>{" "}
-              spaces to <span className="text-blue-800">Work & Live</span>
+               {title}{" "} <span className="text-yellow-400">{highlight}</span>{" "}
+              <span className={`${subtitleColor}`}> {subtitle}</span>
             </h1>
 
             <div className="mt-10 grid grid-cols-3 gap-6 max-w-[450px]">
               {cities.map((city) => (
                 <button
+                onClick={() => {
+    const cityName = city.toLowerCase().replace(" ", "-");
+
+    if (enableCityPopup && mode === "home") {
+      onCityClick(cityName);
+    } else {
+      navigate(`/${mode}/${cityName}`);
+    }
+  }}
                   key={city}
                   className="border rounded-full px-6 py-3 text-base font-medium hover:bg-gray-100 min-w-[140px] whitespace-nowrap"
                 >
@@ -38,7 +56,7 @@ export default function Hero() {
       <div className="absolute top-0 right-0 w-1/2 h-full">
         <div className="h-full overflow-hidden rounded-bl-[140px]">
           <img
-            src={heroImg}
+            src={image}
             alt="Hero"
             className="w-full h-full object-cover object-top"
           />
