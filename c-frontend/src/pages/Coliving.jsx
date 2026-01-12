@@ -3,7 +3,8 @@ import colivingImg from "../assets/hero4.jpg";
 import Navbar from "../components/Navbar";
 import Features from "../components/Features";
 import { useParams } from "react-router-dom";
-import listings from "../data/listings";
+import { fetchSpaces } from "../api/spaces";
+import { useEffect, useState } from "react";
 import ListingGrid from "../components/ListingGrid";
 import LeadForm from "../components/LeadForm";
 import Footer from "../components/Footer";
@@ -55,20 +56,20 @@ const colivingFeatures = [
   },
 ];
 
-const cities = ["delhi", "gurugram", "noida", "greater-noida"];
+const cities = ["gurgaon", "noida", "greater-noida", "delhi"];
 
 export default function Coliving() {
   const { city } = useParams(); 
-  const filteredListings = listings.filter((item) => {
-    if (city) {
-      return (
-        item.spaceType === "coliving" &&
-        item.city === city
-      );
-    }
-    return item.spaceType === "coliving";
-  });
-
+  
+   const [spaces, setSpaces] = useState([]);
+    useEffect(() => {
+   fetchSpaces({
+     spaceType: "coworking",
+     city: city || null,
+   })
+     .then((data) => setSpaces(data))
+     .catch((err) => console.error(err));
+ }, [city]);
   const heading = city
     ? `Top Coworking Spaces in ${city.replace("-", " ")}`
     : "Top Coworking Spaces in India";
@@ -88,39 +89,33 @@ export default function Coliving() {
 )}
    <section className="py-16">
       <div className="max-w-7xl mx-auto px-4">
-      
-        {city ? (
-  /* 🔹 WHEN CITY IS SELECTED (/coliving/delhi) */
-  <>
-    <h1 className="text-3xl font-semibold mb-10">
-      {heading}
-    </h1>
-
-    <ListingGrid listings={filteredListings} />
-  </>
-) : (
-  /* 🔹 WHEN NO CITY (/coliving) */
-  cities.map((c) => {
-    const cityListings = listings.filter(
-      (item) =>
-        item.spaceType === "coliving" &&
-        item.city === c
-    );
-
-    if (cityListings.length === 0) return null;
-
-    return (
-      <div key={c} className="mb-20">
-        <h2 className="text-3xl font-semibold mb-10 text-center">
-          Top Coliving Spaces in{" "}
-          {c.replace("-", " ").toUpperCase()}
-        </h2>
-            
-        <ListingGrid listings={cityListings} />
-      </div>
-    );
-  })
-)}
+   {city ? (
+     <>
+       <h1 className="text-3xl font-semibold mb-10">{heading}</h1>
+       <ListingGrid listings={spaces} />
+     </>
+   ) : (
+     cities.map((c) => {
+       const citySpaces = spaces.filter(
+         (item) => item.city === c
+       );
+   
+       if (citySpaces.length === 0) return null;
+   
+       return (
+         <div key={c} className="mb-20">
+           <h2 className="text-3xl font-semibold mb-10 text-center">
+             Top Coworking Spaces in{" "}
+             {c.replace("-", " ").toUpperCase()}
+           </h2>
+   
+           <ListingGrid listings={citySpaces} />
+         </div>
+       );
+     })
+   )}
+   
+   
 
       </div>
     </section>

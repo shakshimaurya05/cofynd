@@ -17,17 +17,22 @@ router.get('/',async(req,res) => {
 });
 
 //GET spaces by space type(coworking, coliving, virtual office)
-router.get('/type/:type', async(req,res) => {
-  try{
-    const spaces = await space.find({spaceType : req.params.type}) //req.params gives object containing all dynamic parts of URL
+router.get('/type/:type', async (req, res) => {
+  try {
+    const query = { spaceType: req.params.type };
+
+    // If city is passed as query param, add it
+    if (req.query.city) {
+      query.city = req.query.city;
+    }
+
+    const spaces = await space.find(query);
     res.json(spaces);
-  }
-  catch(err){
-    res.status(500).json({
-      message : err.message
-    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 });
+
 
 //GET spaces by city
 router.get('/city/:city', async(req,res) => {
