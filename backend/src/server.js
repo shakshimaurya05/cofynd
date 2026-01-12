@@ -15,6 +15,10 @@ const PORT = process.env.port || 5000;
 app.use(express.json());
 app.use(cors());
 
+//import and use space routes
+const spaceRoutes = require('./routes/spaceRoutes');
+app.use('/api/spaces',spaceRoutes);
+
 app.get('/',(req,res) => {
   res.json({
     message : "Bckend server is running"
