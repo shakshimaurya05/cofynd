@@ -3,7 +3,8 @@ import virtualImg from "../assets/hero3.avif";
 import Navbar from "../components/Navbar";
 import Features from "../components/Features";
 import { useParams } from "react-router-dom";
-import listings from "../data/listings";
+import { fetchSpaces } from "../api/spaces";
+import { useEffect, useState } from "react";
 import ListingGrid from "../components/ListingGrid";
 import LeadForm from "../components/LeadForm";
 import Footer from "../components/Footer";
@@ -54,20 +55,20 @@ const virtualOfficeFeatures = [
       "Complimentary meeting room access every month.",
   },
 ]; 
-const cities = ["delhi", "gurugram", "noida", "greater-noida"];
+const cities = ["gurgaon", "noida", "greater-noida", "delhi"];
 
 export default function VirtualOffice() {
   const { city } = useParams(); 
 
-  const filteredListings = listings.filter((item) => {
-    if (city) {
-      return (
-        item.spaceType === "virtual-office" &&
-        item.city === city
-      );
-    }
-    return item.spaceType === "virtual-office";
-  });
+  const [spaces, setSpaces] = useState([]);
+    useEffect(() => {
+   fetchSpaces({
+     spaceType: "virtual-office",
+     city: city || null,
+   })
+     .then((data) => setSpaces(data))
+     .catch((err) => console.error(err));
+ }, [city]);
 
   const heading = city
     ? `Top Coworking Spaces in ${city.replace("-", " ")}`
@@ -91,37 +92,35 @@ export default function VirtualOffice() {
      <section className="py-16">
       <div className="max-w-7xl mx-auto px-4">
       
-        {city ? (
+        
+   {city ? (
+     <>
+       <h1 className="text-3xl font-semibold mb-10">{heading}</h1>
+       <ListingGrid listings={spaces} />
+     </>
+   ) : (
+     cities.map((c) => {
+       const citySpaces = spaces.filter(
+         (item) => item.city === c
+       );
+   
+       if (citySpaces.length === 0) return null;
+   
+       return (
+         <div key={c} className="mb-20">
+           <h2 className="text-3xl font-semibold mb-10 text-center">
+             Top Coworking Spaces in{" "}
+             {c.replace("-", " ").toUpperCase()}
+           </h2>
+   
+           <ListingGrid listings={citySpaces} />
+         </div>
+       );
+     })
+   )}
+   
+   
   
-  <>
-    <h1 className="text-3xl font-semibold mb-10">
-      {heading}
-    </h1>
-
-    <ListingGrid listings={filteredListings} />
-  </>
-) : (
-  cities.map((c) => {
-    const cityListings = listings.filter(
-      (item) =>
-        item.spaceType === "virtual-office" &&
-        item.city === c
-    );
-
-    if (cityListings.length === 0) return null;
-
-    return (
-      <div key={c} className="mb-20">
-        <h2 className="text-3xl font-semibold mb-10 text-center">
-          Top Virtual Offices in{" "}
-          {c.replace("-", " ").toUpperCase()}
-        </h2>
-
-        <ListingGrid listings={cityListings} />
-      </div>
-    );
-  })
-)}
 
       </div>
     </section>

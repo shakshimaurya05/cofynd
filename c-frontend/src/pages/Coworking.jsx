@@ -3,7 +3,9 @@ import coworkingImg from "../assets/hero2.webp";
 import Navbar from "../components/Navbar";
 import Features from "../components/Features";
 import { useParams } from "react-router-dom";
-import listings from "../data/listings";
+import { fetchSpaces } from "../api/spaces";
+import { useEffect, useState } from "react";
+
 import ListingGrid from "../components/ListingGrid";
 import LeadForm from "../components/LeadForm";
 import Footer from "../components/Footer";
@@ -53,20 +55,22 @@ const coworkingFeatures = [
       "Avoid morning hassle with easy and convenient parking.",
   },
 ];
-const cities = ["delhi", "gurugram", "noida", "greater-noida"];
 
+const cities = ["gurgaon", "noida", "greater-noida", "delhi"];
 
 export default function Coworking() {
+  
+  const [spaces, setSpaces] = useState([]);
    const { city } = useParams();
-   const filteredListings = listings.filter((item) => {
-    if (city) {
-      return (
-        item.spaceType === "coworking" &&
-        item.city === city
-      );
-    }
-    return item.spaceType === "coworking";
-  });
+   useEffect(() => {
+  fetchSpaces({
+    spaceType: "coworking",
+    city: city || null,
+  })
+    .then((data) => setSpaces(data))
+    .catch((err) => console.error(err));
+}, [city]);
+
 
   const heading = city
     ? `Top Coworking Spaces in ${city.replace("-", " ")}`
@@ -90,38 +94,34 @@ export default function Coworking() {
 
       <section className="py-16">
       <div className="max-w-7xl mx-auto px-4">
-       {city ? (
-  /* WHEN CITY IS SELECTED */
+      
+    {city ? (
   <>
-    <h1 className="text-3xl font-semibold mb-10">
-      {heading}
-    </h1>
-
-    <ListingGrid listings={filteredListings} />
+    <h1 className="text-3xl font-semibold mb-10">{heading}</h1>
+    <ListingGrid listings={spaces} />
   </>
 ) : (
-  
   cities.map((c) => {
-    const cityListings = listings.filter(
-      (item) =>
-        item.spaceType === "coworking" &&
-        item.city === c
+    const citySpaces = spaces.filter(
+      (item) => item.city === c
     );
 
-    if (cityListings.length === 0) return null;
-    
+    if (citySpaces.length === 0) return null;
+
     return (
       <div key={c} className="mb-20">
         <h2 className="text-3xl font-semibold mb-10 text-center">
-          Top Spaces in{" "}
+          Top Coworking Spaces in{" "}
           {c.replace("-", " ").toUpperCase()}
         </h2>
 
-        <ListingGrid listings={cityListings} />
+        <ListingGrid listings={citySpaces} />
       </div>
     );
   })
 )}
+
+
 
       </div>
     </section>
