@@ -29,3 +29,30 @@ router.get('/type/:type', async(req,res) => {
   }
 });
 
+//GET a specific space by ID
+router.get('/:id', async(req,res) => {
+  try{
+    const space = await space.findById(req.params.id);
+    if(!space) {
+      return res.json({
+        message : 'Space not found'
+      });
+    }
+  }
+  catch(err){
+    res.status(500).json({message : error.message});
+  }
+});
+
+//GET spaces by city
+router.get(':city', async(req,res) => {
+  try{
+    const spaces = await space.find({city : req.params.city});
+    res.json(spaces);
+  }
+  catch(err){
+    res.status(500).json({message : err.message});
+  }
+});
+
+module.exports = router;
