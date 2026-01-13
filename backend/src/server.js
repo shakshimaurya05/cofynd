@@ -19,6 +19,10 @@ app.use(cors());
 const spaceRoutes = require('./routes/spaceRoutes');
 app.use('/api/spaces',spaceRoutes);
 
+//import and use lead routes
+const leadRoutes = require('./routes/leadRoutes');
+app.use('/api/leads' , leadRoutes);
+
 app.get('/',(req,res) => {
   res.json({
     message : "Bckend server is running"
