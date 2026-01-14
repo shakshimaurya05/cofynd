@@ -102,7 +102,7 @@ export default function Navbar() {
             Contact Us
           </button>
 
-          <button className="flex items-center gap-2 border px-4 py-2 rounded-full hover:bg-gray-50">
+          <button className="flex items-center gap-2 border px-4 py-2 rounded-full hover:bg-gray-50" onClick={()=>navigate('/login')}>
             <FaUser />
             Login
           </button>

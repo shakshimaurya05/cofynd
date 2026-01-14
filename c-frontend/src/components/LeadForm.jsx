@@ -1,6 +1,8 @@
 import propertyImg from "../assets/cards/coworking.jpg";
+import { useState } from "react";
 
 export default function LeadForm() {
+   const [showSuccess, setShowSuccess] = useState(false);
   return (
     <section className="bg-white py-20">
       <div className="max-w-7xl mx-auto px-4">
@@ -58,7 +60,8 @@ flex flex-col md:flex-row items-center gap-12 bg-gradient-to-b from-white to-gra
                 <option>Greater Noida</option>
               </select>
 
-              <button className="bg-yellow-400 hover:bg-yellow-500 transition text-black font-medium rounded-full px-6 py-3">
+              <button className="bg-yellow-400 hover:bg-yellow-500 transition text-black font-medium rounded-full px-6 py-3"  type="button"
+  onClick={() => setShowSuccess(true)}>
                 Submit
               </button>
 
@@ -79,6 +82,26 @@ flex flex-col md:flex-row items-center gap-12 bg-gradient-to-b from-white to-gra
         </div>
 
       </div>
+      {showSuccess && (
+  <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+    <div className="bg-white rounded-2xl p-8 w-[90%] max-w-md text-center shadow-xl">
+      <h3 className="text-2xl font-semibold mb-3">
+        Thank you!
+      </h3>
+      <p className="text-gray-600 mb-6">
+        Our team will contact you shortly.
+      </p>
+
+      <button
+        onClick={() => setShowSuccess(false)}
+        className="bg-yellow-400 hover:bg-yellow-500 px-6 py-2 rounded-full font-medium"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+)}
+
     </section>
   );
 }
