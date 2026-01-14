@@ -1,47 +1,41 @@
 import Navbar from "../components/Navbar";
-
-const dummyLeads = [
-  {
-    id: 1,
-    name: "Aditya Maurya",
-    email: "aditya@gmail.com",
-    phone: "+91 9876543210",
-    city: "Delhi",
-    spaceType: "Coworking",
-  },
-  {
-    id: 2,
-    name: "Rahul Sharma",
-    email: "rahul@gmail.com",
-    phone: "+91 9123456789",
-    city: "Noida",
-    spaceType: "Coliving",
-  },
-  {
-    id: 3,
-    name: "Sneha Verma",
-    email: "sneha@gmail.com",
-    phone: "+91 9988776655",
-    city: "Gurugram",
-    spaceType: "Virtual Office",
-  },
-];
+import { useEffect, useState } from "react";
 
 export default function AdminLeads() {
+  const [leads, setLeads] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("http://localhost:5000/api/leads")
+      .then((res) => res.json())
+      .then((data) => {
+        setLeads(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setLoading(false);
+      });
+  }, []);
+
   return (
     <>
       <Navbar />
 
       <section className="min-h-screen bg-gray-50 py-16">
         <div className="max-w-6xl mx-auto px-4">
-          <h1 className="text-3xl font-semibold mb-10">
-            Leads
-          </h1>
+          <h1 className="text-3xl font-semibold mb-10">Leads</h1>
+
+          {loading && <p>Loading leads...</p>}
+
+          {!loading && leads.length === 0 && (
+            <p>No leads found.</p>
+          )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {dummyLeads.map((lead) => (
+            {leads.map((lead) => (
               <div
-                key={lead.id}
+                key={lead._id}
                 className="bg-white rounded-xl shadow-sm p-6 border"
               >
                 <h2 className="text-lg font-semibold text-gray-900">
