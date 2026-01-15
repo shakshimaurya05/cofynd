@@ -2,9 +2,10 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { FaCheckCircle, FaEnvelope, FaPhoneAlt } from "react-icons/fa";
 import {Link} from 'react-router-dom'
-
+import { useNavigate } from "react-router-dom";
 
 export default function Signup() {
+    const navigate = useNavigate();
   return (
     <>
       <Navbar />
@@ -81,6 +82,7 @@ export default function Signup() {
 />
 
                 <button
+                onClick={() => navigate("/list-your-property")}
                   type="submit"
                   className="w-full border-2 border-blue-600 text-blue-600 font-medium py-2 rounded-lg hover:bg-blue-900 hover:text-white transition"
                 >

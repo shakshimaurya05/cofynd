@@ -17,7 +17,7 @@ export default function CTAStats() {
             </div>
 
             <div className="flex gap-4">
-              <button  onClick={() => navigate("/list-your-property")} className="bg-white text-blue-800 font-semibold px-6 py-3 rounded-full hover:bg-blue-50 transition">
+              <button  onClick={() => navigate("/signup")} className="bg-white text-blue-800 font-semibold px-6 py-3 rounded-full hover:bg-blue-50 transition">
                 List Your Space
               </button>
 
