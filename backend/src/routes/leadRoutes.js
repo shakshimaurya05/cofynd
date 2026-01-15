@@ -27,8 +27,9 @@ router.post('/',async(req,res) => {
 //GET all leads only for admin 
 router.get('/',async(req,res) => {
   try{
-    const leads = (await Lead.find()).sort({createdAt: -1});//show leads in descending order(most recent first)
-    //.sort() is a mongoose query method
+   const leads = await Lead.find().sort({ createdAt: -1 });
+//show leads in descending order(most recent first)
+   //.sort() is a mongoose query method
     res.json(leads);
   }
   catch(err){

@@ -4,7 +4,7 @@ import { FaCheckCircle, FaEnvelope, FaPhoneAlt } from "react-icons/fa";
 import {Link} from 'react-router-dom'
 
 
-export default function ListProperty() {
+export default function Signup() {
   return (
     <>
       <Navbar />
@@ -43,18 +43,35 @@ export default function ListProperty() {
             {/* FORM CARD */}
             <div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-md">
               <h2 className="text-2xl font-semibold mb-1 text-center">
-               Welcome back!
+                Create Account
               </h2>
               <p className="text-sm text-gray-500 mb-6 text-center">
-                Login into your account to manage your properties.
+                Create your Account to List your Property.
               </p>
 
               <form className="space-y-4">
-                
+                <div className="grid grid-cols-2 gap-4">
+                  <input
+                    type="text"
+                    placeholder="First Name"
+                    className="border rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Last Name"
+                    className="border rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
 
                 <input
                   type="email"
                   placeholder="Email Address"
+                  className="w-full border rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+                />
+
+                <input
+                  type="tel"
+                  placeholder="+91 Mobile Number"
                   className="w-full border rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <input
@@ -71,9 +88,9 @@ export default function ListProperty() {
                 </button>
 
                 <p className="text-sm text-center mt-4">
-                 Don't have an Account?{" "}
-                <Link to="/signup" className="text-blue-600">
- Create one
+                  Already have an Account?{" "}
+                <Link to="/login" className="text-blue-600">
+  Sign in
 </Link>
                 </p>
               </form>
