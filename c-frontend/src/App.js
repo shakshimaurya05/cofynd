@@ -1,5 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import ListProperty from "./pages/ListProperty";
+import Signup from "./pages/Signup";
 import Home from "./pages/Home";
 import Coworking from "./pages/Coworking";
 import Coliving from "./pages/Coliving";
@@ -15,10 +16,10 @@ function App() {
 
 <Route path="/coliving" element={<Coliving />} />
 <Route path="/coliving/:city" element={<Coliving />} />
-
+<Route path="/list-your-property" element={<ListProperty/>}/>
 <Route path="/virtual-office" element={<VirtualOffice />} />
 <Route path="/virtual-office/:city" element={<VirtualOffice />} />
-<Route path="/list-your-property" element={<ListProperty />} />
+<Route path="/signup" element={<Signup />} />
 <Route path="/login" element={<Login />} />
 <Route path="/admin/leads" element={<AdminLeads />} />
     </Routes>
