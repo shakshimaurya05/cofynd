@@ -12,7 +12,7 @@ router.post('/',async(req,res) => {
       spaceType : req.body.spaceType,
       city : req.body.city
     };
-
+    
     const savedLead = await Lead.create(leadData);
     res.status(201).json(savedLead);
 

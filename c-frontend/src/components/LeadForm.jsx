@@ -128,7 +128,7 @@ export default function LeadForm() {
 
       {/* SUCCESS POPUP */}
       {showSuccess && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+       <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl p-8 text-center">
             <h3 className="text-2xl font-semibold mb-3">Thank you!</h3>
             <p className="text-gray-600 mb-6">
