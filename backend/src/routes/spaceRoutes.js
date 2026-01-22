@@ -16,28 +16,42 @@ router.get('/',async(req,res) => {
   }
 });
 
-//GET spaces by space type(coworking, coliving, virtual office)
-router.get('/type/:type', async (req, res) => {
-  try {
-    const query = { spaceType: req.params.type };
+//GET spaces by microLocation
 
-    // If city is passed as query param, add it
-    if (req.query.city) {
-      query.city = req.query.city;
-    }
-
-    const spaces = await space.find(query);
+//GET spaces by microLocation - IMPROVED TO HANDLE SPACES AND CASE DIFFERENCES
+router.get('/microLocation/:microLocation', async(req,res) =>{
+  try{
+    // Normalize the search term by removing spaces and special characters
+    const normalizeSearchTerm = (term) => term.toLowerCase().replace(/\s+/g, '').replace(/[^a-z0-9]/g, '');
+    const normalizedInput = normalizeSearchTerm(req.params.microLocation);
+    
+    // Find spaces where the normalized microLocation matches the normalized search term
+    const spaces = await space.find({
+      $expr: {
+        $regexMatch: {
+          input: { $replaceAll: { input: { $toLower: "$microLocation" }, find: " ", replacement: "" } },
+          regex: normalizedInput,
+          options: "i"
+        }
+      }
+    });
+    
     res.json(spaces);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+  }
+  catch(err){
+    res.status(500).json({
+      message: err.message
+    });
   }
 });
+
 
 
 //GET spaces by city
 router.get('/city/:city', async(req,res) => {
   try{
-    const spaces = await space.find({city : req.params.city});
+    const spaces = await space.find({
+      city : new RegExp(req.params.city,'i') });
     res.json(spaces);
   }
   catch(err){
@@ -64,7 +78,32 @@ router.get('/:id', async(req,res) => {
 
 
 
-// POST route to add sample data (for testing purposes)
+//GET spaces by company name
 
+router.get('/company/:companyName', async(req,res) => {
+  try{
+    // Get the search term and normalize it
+    const searchTerm = req.params.companyName.toLowerCase();
+    
+    // Create a regex that removes spaces from both search term and database entries for comparison
+    const normalizedSearchTerm = searchTerm.replace(/\s+/g, '');
+    
+    // Find companies where the normalized name matches
+    const spaces = await space.find({
+      $expr: {
+        $regexMatch: {
+          input: { $replaceAll: { input: { $toLower: "$companyName" }, find: " ", replacement: "" } },
+          regex: normalizedSearchTerm,
+          options: "i"
+        }
+      }
+    });
+    
+    res.json(spaces);
+  }
+  catch(err){
+    res.status(500).json({message : err.message});
+  }
+});
 
 module.exports = router;

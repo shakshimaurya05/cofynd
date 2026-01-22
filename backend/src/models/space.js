@@ -1,47 +1,43 @@
 const mongoose = require('mongoose');
 
 const spaceSchema = new mongoose.Schema({
-  name : {
-    type : String,
-    required : true
+  companyName: {
+    type: String,
+    required: true
   },
-  description : {
-    type : String,
-    required : true
+  address: {
+    type: String,
+    required: true
   },
-  spaceType : {
-    type : String,
-    required : true,
-    enum : ['coworking','coliving','virtual-office']
+  city: {
+    type: String,
+    required: true
   },
-  city : {
-    type : String,
-    required : true
+  microLocation: {
+    type: String,
+    required: true
   },
-  location : {
-    type : String,
-    required : true
+  pricing: {
+    dedicatedSeat: {
+      type: Number
+    },
+    cabinSeat: {
+      type: Number
+    }
   },
-  pricePerMonth : {
-    type : Number,
-    required : true
-  },
-  rating : {
-    type : Number,
-    required : true
-  },
-  amenities : [{
-    type : String
+  images: [{
+    type: String
   }],
-  image : {
-    type :  String
-  }
-},
-  {
-    timestamps : true //for getting createdAt and updatedAt fields
-  
-
+  rating: {
+    type: Number
+  },
+  amenities: [{
+    type: String
+  }]
+}, {
+  timestamps: true
 });
 
-const space = mongoose.model('space',spaceSchema);
-module.exports = space;
+const Space = mongoose.model('Space', spaceSchema);
+
+module.exports = Space;
