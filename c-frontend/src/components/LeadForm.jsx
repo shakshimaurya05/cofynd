@@ -1,6 +1,6 @@
-import propertyImg from "../assets/cards/coworking.jpg";
+import propertyImg from "../assets/hero1.webp";
 import { useState } from "react";
-
+import { motion } from "framer-motion";
 export default function LeadForm() {
   const [formData, setFormData] = useState({
     name: "",
@@ -45,17 +45,28 @@ export default function LeadForm() {
   };
 
   return (
-    <section className="bg-white py-20">
+    <section className="bg-[#FAFAFA] py-20">
+      
       <div className="max-w-7xl mx-auto px-4">
-        <div className="bg-white rounded-3xl shadow p-8 md:p-12 flex flex-col md:flex-row gap-12">
+          
+        <motion.div
+  initial={{ opacity: 0, y: 40 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  viewport={{ once: true }}
+  transition={{
+    duration: 0.8,
+    ease: "easeOut",
+  }}
+  className="bg-white rounded-3xl shadow p-8 md:p-12 flex flex-col md:flex-row gap-12"
+>
 
           {/* LEFT */}
           <div className="md:w-2/3">
             <h2 className="text-2xl font-semibold">
-              Let us find your perfect Property
+              Let’s help you find the perfect property
             </h2>
             <p className="text-gray-500 mt-2">
-              Connect to a CoFynd Space Expert now
+             Connect with a Cowork Spaze Expert today
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
@@ -84,28 +95,13 @@ export default function LeadForm() {
               />
 
               <select
-                name="spaceType"
-                value={formData.spaceType}
-                onChange={handleChange}
-                className="border rounded-full px-5 py-3"
-              >
-                <option value="">Type Of Space</option>
-                <option value="coworking">Coworking</option>
-                <option value="coliving">Coliving</option>
-                <option value="virtual-office">Virtual Office</option>
-              </select>
-
-              <select
                 name="city"
                 value={formData.city}
                 onChange={handleChange}
                 className="border rounded-full px-5 py-3"
               >
                 <option value="">Select City</option>
-                <option value="delhi">Delhi</option>
                 <option value="gurgaon">Gurugram</option>
-                <option value="noida">Noida</option>
-                <option value="greater-noida">Greater Noida</option>
               </select>
 
               <button
@@ -123,7 +119,7 @@ export default function LeadForm() {
               <img src={propertyImg} alt="Property" className="w-full h-full object-cover" />
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
 
       {/* SUCCESS POPUP */}
@@ -141,8 +137,10 @@ export default function LeadForm() {
               Close
             </button>
           </div>
+        
         </div>
       )}
+    
     </section>
   );
-}
+}                

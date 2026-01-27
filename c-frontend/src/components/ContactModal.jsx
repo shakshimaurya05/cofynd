@@ -1,9 +1,6 @@
 import { useState } from "react";
-import {
-  FaTimes,
-  FaCheckCircle,
-  FaEnvelope
-} from "react-icons/fa";
+import { motion } from "framer-motion";
+import { FaTimes, FaCheckCircle, FaEnvelope } from "react-icons/fa";
 
 export default function ContactModal({ onClose }) {
   const [showSuccess, setShowSuccess] = useState(false);
@@ -24,8 +21,8 @@ export default function ContactModal({ onClose }) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         ...form,
-        spaceType: form.spaceType || "contact",
-        city: form.city || "general",
+        spaceType: form.spaceType || "general",
+        city: form.city || "india",
       }),
     });
 
@@ -34,140 +31,156 @@ export default function ContactModal({ onClose }) {
 
   return (
     <>
-      {/* MODAL */}
-      <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/50">
-        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl relative overflow-hidden">
+    
+      <motion.div
+        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[999]"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        onClick={onClose}
+      />
+
+
+      <motion.div
+        className="fixed inset-y-0 right-0 z-[1000] w-full max-w-xl"
+        initial={{ x: "100%" }}
+        animate={{ x: 0 }}
+        exit={{ x: "100%" }}
+        transition={{ duration: 0.55, ease: "easeOut" }}
+      >
+        <div className="h-full bg-white/10 backdrop-blur-xl border-l border-white/30 text-white relative">
 
           {/* CLOSE */}
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 text-gray-500 hover:text-black"
+            className="absolute top-5 right-5 text-white/70 hover:text-white"
           >
             <FaTimes size={18} />
           </button>
 
-          <div className="grid grid-cols-1 md:grid-cols-2">
+          <div className="h-full overflow-y-auto p-8 flex flex-col">
 
-            {/* LEFT */}
-            <div className="p-8 bg-gradient-to-br from-blue-50 to-white">
-              <h2 className="text-xl font-semibold mb-2">
-                Find Your Perfect Space Now!
+            {/* HEADER */}
+            <div className="mb-6">
+              <h2 className="text-2xl font-semibold mb-2">
+                Let’s Find the Right Workspace for You
               </h2>
-
-              <p className="text-sm text-gray-600 mb-6">
-                Our space experts will provide customized quotes with detailed
-                inventory as per your needs.
+              <p className="text-sm text-white/70">
+                Share your requirements and our experts will suggest the
+                best-fit options tailored to your needs.
               </p>
-
-              <div className="space-y-3 text-sm">
-                {[
-                  "Customized Space",
-                  "Prime Locations",
-                  "Expert Guided Tours",
-                  "Flexible Terms",
-                ].map((item) => (
-                  <div key={item} className="flex items-center gap-2">
-                    <FaCheckCircle className="text-blue-600" />
-                    {item}
-                  </div>
-                ))}
-              </div>
             </div>
 
-            {/* RIGHT FORM */}
-            <div className="p-8">
-              <h2 className="text-xl font-semibold mb-1">
-                Yes, I am Interested!
-              </h2>
-              <p className="text-sm text-gray-500 mb-6">
-                Fill your details for a customized quote
-              </p>
-
-              <form onSubmit={handleSubmit} className="space-y-4">
-
-                <input
-                  placeholder="Name*"
-                  className="w-full border rounded-lg px-4 py-2"
-                  onChange={(e) =>
-                    setForm({ ...form, name: e.target.value })
-                  }
-                />
-
-                <input
-                  placeholder="Email*"
-                  className="w-full border rounded-lg px-4 py-2"
-                  onChange={(e) =>
-                    setForm({ ...form, email: e.target.value })
-                  }
-                />
-
-                <input
-                  placeholder="+91 Phone*"
-                  className="w-full border rounded-lg px-4 py-2"
-                  onChange={(e) =>
-                    setForm({ ...form, phone: e.target.value })
-                  }
-                />
-
-                <div className="grid grid-cols-2 gap-3">
-                  <select
-                    className="border rounded-lg px-3 py-2 text-sm"
-                    onChange={(e) =>
-                      setForm({ ...form, spaceType: e.target.value })
-                    }
-                  >
-                    <option value="">Type Of Space</option>
-                    <option value="coworking">Coworking</option>
-                    <option value="coliving">Coliving</option>
-                    <option value="virtual-office">Virtual Office</option>
-                  </select>
-
-                  <select
-                    className="border rounded-lg px-3 py-2 text-sm"
-                    onChange={(e) =>
-                      setForm({ ...form, city: e.target.value })
-                    }
-                  >
-                    <option value="">Select City</option>
-                    <option value="delhi">Delhi</option>
-                    <option value="noida">Noida</option>
-                    <option value="gurgaon">Gurugram</option>
-                  </select>
+            {/* FEATURES */}
+            <div className="space-y-3 mb-8 text-sm">
+              {[
+                "Personalized workspace recommendations",
+                "Access to verified spaces",
+                "Transparent pricing & flexible plans",
+                "Free expert assistance",
+              ].map((item) => (
+                <div key={item} className="flex items-center gap-2">
+                  <FaCheckCircle className="text-white" />
+                  <span className="text-white/80">{item}</span>
                 </div>
+              ))}
+            </div>
 
-                <button className="w-full bg-blue-600 text-white py-2 rounded-lg">
-                  Submit
-                </button>
-              </form>
+            {/* FORM */}
+            <form onSubmit={handleSubmit} className="space-y-4 mt-auto">
+              <input
+                placeholder="Full Name"
+                className="w-full bg-transparent border border-white/40 rounded-lg px-4 py-2 text-white placeholder-white/60 focus:outline-none focus:border-white"
+                onChange={(e) =>
+                  setForm({ ...form, name: e.target.value })
+                }
+              />
 
-              <div className="mt-5 flex items-center gap-3 text-sm text-gray-600">
-                <FaEnvelope />
-                <span>hello@cofynd.com</span>
+              <input
+                placeholder="Email Address"
+                className="w-full bg-transparent border border-white/40 rounded-lg px-4 py-2 text-white placeholder-white/60 focus:outline-none focus:border-white"
+                onChange={(e) =>
+                  setForm({ ...form, email: e.target.value })
+                }
+              />
+
+              <input
+                placeholder="Mobile Number"
+                className="w-full bg-transparent border border-white/40 rounded-lg px-4 py-2 text-white placeholder-white/60 focus:outline-none focus:border-white"
+                onChange={(e) =>
+                  setForm({ ...form, phone: e.target.value })
+                }
+              />
+
+              <div className="grid grid-cols-2 gap-3">
+                <select
+                  className="bg-transparent border border-white/40 rounded-lg px-3 py-2 text-sm text-white focus:outline-none"
+                  onChange={(e) =>
+                    setForm({ ...form, spaceType: e.target.value })
+                  }
+                >
+                  <option value="" className="text-black">
+                    Space Type
+                  </option>
+                  <option value="coworking" className="text-black">
+                    Coworking
+                  </option>
+                </select>
+
+                <select
+                  className="bg-transparent border border-white/40 rounded-lg px-3 py-2 text-sm text-white focus:outline-none"
+                  onChange={(e) =>
+                    setForm({ ...form, city: e.target.value })
+                  }
+                >
+                  <option value="" className="text-black">
+                    Preferred City
+                  </option>
+                  <option value="gurgaon" className="text-black ">
+                    Gurugram
+                  </option>
+                </select>
               </div>
+
+              <button className="w-full border border-white rounded-lg py-2 text-white font-medium hover:bg-yellow-500 hover:text-black transition">
+                Get Recommendations
+              </button>
+            </form>
+
+            {/* FOOTER */}
+            <div className="mt-6 flex items-center gap-2 text-sm text-white/70">
+              <FaEnvelope />
+              <span>coworkspaze@gmail.com.com</span>
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
-      {/* SUCCESS POPUP */}
+      {/* SUCCESS */}
       {showSuccess && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-[1000]">
-          <div className="bg-white rounded-xl p-8 text-center">
-            <h3 className="text-2xl font-semibold mb-2">Thank you!</h3>
-            <p className="text-gray-600 mb-6">
-              Our team will contact you shortly.
+        <motion.div
+          className="fixed inset-0 z-[1100] flex items-center justify-center bg-black/70"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+        >
+          <div className="border border-white/40 bg-white/10 backdrop-blur-xl text-white rounded-xl p-8 text-center">
+            <h3 className="text-2xl font-semibold mb-2">
+              Request Submitted
+            </h3>
+            <p className="text-white/70 mb-6">
+              Our team will connect with you shortly.
             </p>
             <button
               onClick={() => {
                 setShowSuccess(false);
                 onClose();
               }}
-              className="bg-yellow-400 px-6 py-2 rounded-full"
+              className="border border-white px-6 py-2 rounded-full hover:bg-white hover:text-black transition"
             >
               Close
             </button>
           </div>
-        </div>
+        </motion.div>
       )}
     </>
   );

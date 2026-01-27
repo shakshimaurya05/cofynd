@@ -1,25 +1,22 @@
 import { useState, useEffect } from "react";
+import logo from "../assets/logos/mainLogo.png"
+import { AnimatePresence } from "framer-motion";
 import {
-  FaCompass,
   FaSearch,
   FaChevronDown,
   FaMapMarkerAlt,
-  FaUser,
+
   FaBars,
   FaTimes,
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import ContactModal from "./ContactModal";
 
-const cities = ["Delhi", "Noida", "Gurgaon", "Greater Noida"];
-const menus = ["Coworking", "Coliving", "Virtual Office"];
-
 export default function Navbar() {
   const navigate = useNavigate();
 
-  const [openMenu, setOpenMenu] = useState(null);        // desktop
-  const [mobileOpen, setMobileOpen] = useState(false);  // mobile toggle
-  const [mobileDropdown, setMobileDropdown] = useState(null);
+  const [openMenu, setOpenMenu] = useState(null);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const [showContact, setShowContact] = useState(false);
 
   useEffect(() => {
@@ -28,13 +25,10 @@ export default function Navbar() {
     return () => document.removeEventListener("click", closeMenu);
   }, []);
 
-  const handleNavigate = (type, city) => {
-    const spaceType = type.toLowerCase().replace(" ", "-");
-    const citySlug = city.toLowerCase().replace(" ", "-");
-    navigate(`/${spaceType}/${citySlug}`);
+  const handleNavigate = () => {
+    navigate("/coworking/gurgaon");
     setOpenMenu(null);
     setMobileOpen(false);
-    setMobileDropdown(null);
   };
 
   return (
@@ -43,20 +37,24 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-3">
 
         {/* LOGO */}
-        <div
-          onClick={() => navigate("/")}
-          className="flex items-center text-2xl font-bold text-blue-900 cursor-pointer"
-        >
-          <FaCompass className="mr-2" />
-          cofynd
-        </div>
+       <div
+  onClick={() => navigate("/")}
+  className="flex items-center cursor-pointer"
+>
+  <img
+    src={logo}  
+    alt="CoworkSpaze Logo"
+    className="h-10 w-auto scale-[3] mr-9"
+  />
+</div>
 
- 
-        <div className="flex items-center border rounded-full px-4 py-2 flex-1 max-w-md">
+
+        {/* SEARCH */}
+        <div className="hidden sm:flex items-center border rounded-full px-4 py-2 flex-1 max-w-md">
           <FaSearch className="text-gray-400 mr-2" />
           <input
             type="text"
-            placeholder="Search coworking, coliving..."
+            placeholder="Search coworking spaces..."
             className="outline-none w-full text-sm"
           />
         </div>
@@ -66,34 +64,36 @@ export default function Navbar() {
           className="hidden md:flex items-center gap-6 text-sm font-medium ml-auto"
           onClick={(e) => e.stopPropagation()}
         >
-          {menus.map((item) => (
-            <div key={item} className="relative">
-              <button
-                onClick={() =>
-                  setOpenMenu(openMenu === item ? null : item)
-                }
-                className="flex items-center gap-1 hover:text-blue-800"
-              >
-                {item}
-                <FaChevronDown size={12} />
-              </button>
+          {/* EMAIL */}
+         <a href="mailto:coworkspaze@gmail.com">
+  coworkspaze@gmail.com |
+</a>
 
-              {openMenu === item && (
-                <div className="absolute top-8 left-0 bg-white border rounded-md shadow-sm w-44">
-                  {cities.map((city) => (
-                    <div
-                      key={city}
-                      className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                      onClick={() => handleNavigate(item, city)}
-                    >
-                      <FaMapMarkerAlt className="text-blue-700" />
-                      {city}
-                    </div>
-                  ))}
+
+          {/* COWORKING DROPDOWN */}
+          <div className="relative">
+            <button
+              onClick={() =>
+                setOpenMenu(openMenu === "coworking" ? null : "coworking")
+              }
+              className="flex items-center gap-1 hover:text-blue-800"
+            >
+              Coworking
+              <FaChevronDown size={12} />
+            </button>
+
+            {openMenu === "coworking" && (
+              <div className="absolute top-8 left-0 bg-white border rounded-md shadow-sm w-44">
+                <div
+                  className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                  onClick={handleNavigate}
+                >
+                  <FaMapMarkerAlt className="text-blue-700" />
+                  Gurugram
                 </div>
-              )}
-            </div>
-          ))}
+              </div>
+            )}
+          </div>
 
           <button
             onClick={() => setShowContact(true)}
@@ -101,20 +101,12 @@ export default function Navbar() {
           >
             Contact Us
           </button>
-
-          <button className="flex items-center gap-2 border px-4 py-2 rounded-full hover:bg-gray-50" onClick={()=>navigate('/login')}>
-            <FaUser />
-            Login
-          </button>
         </div>
 
         {/* MOBILE TOGGLE */}
         <button
-          className="md:hidden text-xl"
-          onClick={() => {
-            setMobileOpen(!mobileOpen);
-            setMobileDropdown(null);
-          }}
+          className="md:hidden text-xl ml-auto"
+          onClick={() => setMobileOpen(!mobileOpen)}
         >
           {mobileOpen ? <FaTimes /> : <FaBars />}
         </button>
@@ -124,40 +116,15 @@ export default function Navbar() {
       {mobileOpen && (
         <div className="md:hidden bg-white border-t px-4 py-4 space-y-4">
 
-          {menus.map((item) => (
-            <div key={item} className="border-b pb-3">
-              <button
-                className="w-full flex justify-between items-center font-semibold"
-                onClick={() =>
-                  setMobileDropdown(
-                    mobileDropdown === item ? null : item
-                  )
-                }
-              >
-                {item}
-                <FaChevronDown
-                  className={`transition-transform ${
-                    mobileDropdown === item ? "rotate-180" : ""
-                  }`}
-                />
-              </button>
+          <div className="font-semibold">Coworking</div>
 
-              {mobileDropdown === item && (
-                <div className="mt-3 space-y-2 pl-4">
-                  {cities.map((city) => (
-                    <div
-                      key={city}
-                      className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer"
-                      onClick={() => handleNavigate(item, city)}
-                    >
-                      <FaMapMarkerAlt />
-                      {city}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
+          <div
+            className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer pl-2"
+            onClick={handleNavigate}
+          >
+            <FaMapMarkerAlt />
+            Gurugram
+          </div>
 
           <button
             onClick={() => {
@@ -169,17 +136,20 @@ export default function Navbar() {
             Contact Us
           </button>
 
-          <button className="w-full border px-4 py-2 rounded-full flex items-center justify-center gap-2">
-            <FaUser />
-            Login
-          </button>
+          
+
+          <div className="text-center text-sm text-gray-500">
+            coworkspaze@gmail.com
+          </div>
         </div>
       )}
 
       {/* CONTACT MODAL */}
+      <AnimatePresence>
       {showContact && (
         <ContactModal onClose={() => setShowContact(false)} />
       )}
+      </AnimatePresence>
     </nav>
   );
 }
