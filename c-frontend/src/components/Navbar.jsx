@@ -44,13 +44,13 @@ export default function Navbar() {
   <img
     src={logo}  
     alt="CoworkSpaze Logo"
-    className="h-10 w-auto scale-[3] mr-9"
+    className="h-10 w-auto scale-[3.8] mr-10"
   />
 </div>
 
 
         {/* SEARCH */}
-        <div className="hidden sm:flex items-center border rounded-full px-4 py-2 flex-1 max-w-md">
+        <div className="hidden sm:flex items-center border rounded-full px-4 py-2 flex-1 max-w-md ml-9">
           <FaSearch className="text-gray-400 mr-2" />
           <input
             type="text"

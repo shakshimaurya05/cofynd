@@ -54,33 +54,49 @@ const coworkingFeatures = [
 
 export default function Coworking() {
   const { city } = useParams();
+
   const [spaces, setSpaces] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState("all");
 
+  // default city if route is /coworking
+ const normalizeCity = (city) => {
+  if (!city) return "gurugram";
+  if (city.toLowerCase() === "gurgaon") return "gurugram";
+  return city.toLowerCase();
+};
 
-  const activeCity = city || "gurgaon";
+const activeCity = normalizeCity(city);
 
+  // fetch spaces whenever city changes
   useEffect(() => {
-    fetchSpaces({
-      spaceType: "coworking",
-      city: activeCity,
-    })
+    fetchSpaces({ city: activeCity })
       .then((data) => setSpaces(data))
       .catch((err) => console.error(err));
   }, [activeCity]);
 
-  // Auto-generate locations from API data
+  // reset microlocation filter when city changes
+  useEffect(() => {
+    setSelectedLocation("all");
+  }, [city]);
+
+  // generate microlocations dynamically
   const locations = [
     "all",
-    ...new Set(spaces.map((item) => item.location)),
+    ...new Set(
+      spaces
+        .map((item) => item.location)
+        .filter(Boolean)
+    ),
   ];
 
-  // Filter logic
+  // filter spaces
   const filteredSpaces =
     selectedLocation === "all"
       ? spaces
       : spaces.filter(
-          (item) => item.location === selectedLocation
+          (item) =>
+            item.location?.toLowerCase() ===
+            selectedLocation.toLowerCase()
         );
 
   const heading = `Top Coworking Spaces in ${activeCity.replace("-", " ")}`;
@@ -89,10 +105,9 @@ export default function Coworking() {
     <>
       <Navbar />
 
-      {/* ONLY FOR /coworking */}
+      {/* HERO + FEATURES ONLY ON /coworking */}
       {!city && (
         <>
-          {/* BACKGROUND SECTION */}
           <section
             className="relative h-[300px] flex items-center justify-center text-white"
             style={{
@@ -107,13 +122,12 @@ export default function Coworking() {
                 Discover Premium Coworking Spaces
               </h1>
               <p className="text-lg text-gray-200">
-                Flexible, fully-equipped coworking offices in Gurgaon designed
-                for startups, teams & enterprises.
+                Flexible, fully-equipped coworking offices for startups,
+                teams & enterprises.
               </p>
             </div>
           </section>
 
-          {/* FEATURES */}
           <Features features={coworkingFeatures} />
         </>
       )}
@@ -121,33 +135,32 @@ export default function Coworking() {
       {/* LISTINGS */}
       <section className="py-16 bg-[#FAFAFA]">
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl font-semibold mb-8 text-left">
+          <h2 className="text-3xl font-semibold mb-8">
             {heading}
           </h2>
 
-          {/* LOCATION FILTER – ONLY ON /coworking/:city */}
+          {/* MICRLOCATION FILTER ONLY ON /coworking/:city */}
           {city && (
-  <div className="mb-6 overflow-x-auto">
-    <div className="flex gap-2 whitespace-nowrap pb-1">
-      {locations.map((loc) => (
-        <button
-          key={loc}
-          onClick={() => setSelectedLocation(loc)}
-          className={`px-3 py-1.5 rounded-full border text-xs font-medium
-            transition-all duration-200
-            ${
-              selectedLocation === loc
-                ? "bg-blue-600 text-white border-blue-600"
-                : "bg-white text-gray-600 border-gray-300 hover:border-blue-500 hover:text-blue-600"
-            }`}
-        >
-          {loc === "all" ? "All" : loc}
-        </button>
-      ))}
-    </div>
-  </div>
-)}
-
+            <div className="mb-6 overflow-x-auto">
+              <div className="flex gap-2 whitespace-nowrap pb-1">
+                {locations.map((loc) => (
+                  <button
+                    key={loc}
+                    onClick={() => setSelectedLocation(loc)}
+                    className={`px-3 py-1.5 rounded-full border text-xs font-medium
+                      transition-all duration-200
+                      ${
+                        selectedLocation === loc
+                          ? "bg-blue-600 text-white border-blue-600"
+                          : "bg-white text-gray-600 border-gray-300 hover:border-blue-500 hover:text-blue-600"
+                      }`}
+                  >
+                    {loc === "all" ? "All" : loc}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
 
           <ListingGrid listings={filteredSpaces} />
         </div>

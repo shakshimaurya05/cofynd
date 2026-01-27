@@ -3,7 +3,7 @@ import ListProperty from "./pages/ListProperty";
 import Signup from "./pages/Signup";
 import Home from "./pages/Home";
 import Coworking from "./pages/Coworking";
-import AdminLeads from "./pages/AdminLead"
+
 import Login from "./pages/Login"
 import ShowCard from "./pages/ShowCard";
 function App() {
@@ -17,7 +17,7 @@ function App() {
 
 <Route path="/signup" element={<Signup />} />
 <Route path="/login" element={<Login />} />
-<Route path="/admin/leads" element={<AdminLeads />} />
+
 <Route path="/space/:id" element={<ShowCard />} />
     </Routes>
   );

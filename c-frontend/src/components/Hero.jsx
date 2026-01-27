@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import heroImg from "../assets/hero1.webp";
 import { useEffect, useState, useMemo } from "react";
 import HeroLeadForm from "./HeroLeadForm";
-
+import logo from "../assets/logos/mainLogo.jpeg"
 export default function Hero() {
   const navigate = useNavigate();
 const texts = useMemo(() => [
@@ -73,7 +73,7 @@ useEffect(() => {
       transition={{ duration: 1, ease: "easeOut", delay: 0.25 }}
       className="text-white"
     >
-      <p className="uppercase tracking-widest text-sm text-yellow-400 mb-4">
+      <p className="uppercase tracking-widest text-sm text-yellow-300 mb-4">
         Workspaces Worth Working From
       </p>
 
@@ -87,14 +87,26 @@ useEffect(() => {
         <span className="animate-pulse">|</span>
       </p>
 
-      <div className="mt-10 flex gap-4">
-        <button
-          onClick={() => navigate("/coworking")}
-          className="bg-yellow-400 text-black px-8 py-3 rounded-full font-medium hover:bg-yellow-500 transition"
-        >
-          Explore Spaces
-        </button>
-      </div>
+     <div className="mt-10 flex items-center gap-4">
+
+  <button
+    onClick={() => navigate("/coworking")}
+    className="bg-yellow-400 text-black px-10 py-4 rounded-full font-semibold text-lg hover:bg-yellow-500 transition"
+  >
+    Explore Spaces
+  </button>
+
+  {/* Divider */}
+  <div className="h-8 md:h-11 w-px bg-white/50 ml-3" />
+
+  {/* Logo */}
+  <img
+    src={logo}
+    alt="CoworkSpaze"
+    className="h-12 md:h-14 object-contain ml-3"
+  />
+
+</div>
     </motion.div>
 
    
