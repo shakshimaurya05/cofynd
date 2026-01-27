@@ -1,7 +1,15 @@
+import { motion } from "framer-motion";
 export default function Features({ features }) {
   return (
-    <section className="bg-white py-16">
-      <div className="max-w-7xl mx-auto px-4">
+    <section className="bg-[#FAFAFA]  py-16">
+     
+         <motion.div
+  initial={{ opacity: 0, y: 40 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  viewport={{ once: true }}
+  transition={{ duration: 0.6, ease: "easeOut" }}
+   className="max-w-7xl mx-auto px-4"
+>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {features.map((item, index) => (
             <div key={index}>
@@ -22,7 +30,7 @@ export default function Features({ features }) {
             </div>
           ))}
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }

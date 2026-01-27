@@ -1,42 +1,26 @@
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
-import Categories from "../components/Categories";
-import FeaturedAndCTA from "../components/FeaturedAndCTA";
-import CTAStats from "../components/CTAStats";
+import About from "../components/About";
+import Adv from "../components/Adv";
 import Footer from "../components/Footer";
-import TrustedBy from "../components/TrustedBy";
+import FeaturedCoworking from "../components/FeaturedCoworking";
 import LeadForm from "../components/LeadForm";
-import heroImg from "../assets/hero1.jpg";
-import { useState } from "react";
-import CityActionModal from "../components/CityActionModal";
+import CTAStats from "../components/CTAStats";
+import HowItWorks from "../components/HowItWorks";
 function Home() {
-  const [selectedCity, setSelectedCity] = useState(null);
 
   return (
     <>
       <Navbar />
-    <Hero
-        title="Choose from"
-        highlight="1000+ spaces to"
-        subtitle="work and live in India"
-        subtitleColor="text-blue-800"
-        image={heroImg}
-        enableCityPopup
-  onCityClick={(city) => setSelectedCity(city)}
-  mode="home"
-      />
-      <Categories />
-      <CTAStats />
-      <FeaturedAndCTA />
-     
-      <TrustedBy />
-       <LeadForm />
-       {selectedCity && (
-  <CityActionModal
-    city={selectedCity}
-    onClose={() => setSelectedCity(null)}
-  />
-)}
+      <Hero  />
+      <About />
+      <CTAStats />                                                                              
+      <HowItWorks />
+      <LeadForm />
+      <FeaturedCoworking />
+      <Adv />
+      
+      
       <Footer />
     </>
   );

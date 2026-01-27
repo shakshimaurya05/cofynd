@@ -1,4 +1,9 @@
 import { FaStar, FaMapMarkerAlt } from "react-icons/fa";
+import { useState } from "react";
+import { FaTimes } from "react-icons/fa";
+import GetQuote from "./getQuote.jsx";
+import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 const images = require.context(
    "../assets/listings",
   true,
@@ -9,8 +14,20 @@ export default function ListingCard({ item }) {
   const imageSrc = images(
     `./${item.spaceType}/${item.image}`
   );
+  const navigate=useNavigate();
+const [showQuote, setShowQuote] = useState(false);
 
   return (
+    <motion.div
+  initial={{ opacity: 0, y: 40 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  viewport={{ once: true }}
+  transition={{ duration: 0.6, ease: "easeOut" }}
+  onClick={() => navigate(`/space/${item._id}`)}
+      className="cursor-pointer"
+  
+>
+
     <div className="bg-white rounded-2xl overflow-hidden border border-gray-100 
                     shadow-[0_8px_30px_rgba(0,0,0,0.05)] 
                     hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)]
@@ -43,11 +60,37 @@ export default function ListingCard({ item }) {
             ₹{item.pricePerMonth}/month
           </p>
 
-          <button className="bg-blue-600 text-white text-sm px-4 py-2 rounded-full">
+          <button   onClick={(e) => {
+    e.stopPropagation(); 
+    setShowQuote(true);
+  }}className="bg-blue-600 text-white text-sm px-4 py-2 rounded-full">
             Get Quote
           </button>
         </div>
       </div>
     </div>
+    {showQuote && (
+  <div
+    className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center px-4 "
+    onClick={() => setShowQuote(false)}
+  >
+    <div
+      onClick={(e) => e.stopPropagation()}
+      className="relative"
+    >
+      <GetQuote />
+
+      {/* Close button */}
+      <button
+        onClick={() => setShowQuote(false)}
+        className="absolute -top-3 -right-3 bg-white rounded-full w-8 h-8 flex items-center justify-center shadow"
+      >
+         <FaTimes size={14} />
+      </button>
+    </div>
+  </div>
+)}
+
+    </motion.div>
   );
 }
