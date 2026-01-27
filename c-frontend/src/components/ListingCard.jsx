@@ -1,19 +1,13 @@
-import { FaStar, FaMapMarkerAlt } from "react-icons/fa";
+import { FaMapMarkerAlt } from "react-icons/fa";
 import { useState } from "react";
 import { FaTimes } from "react-icons/fa";
 import GetQuote from "./getQuote.jsx";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-const images = require.context(
-   "../assets/listings",
-  true,
-  /\.(png|jpe?g|webp|avif)$/
-);
+
 
 export default function ListingCard({ item }) {
-  const imageSrc = images(
-    `./${item.spaceType}/${item.image}`
-  );
+
   const navigate=useNavigate();
 const [showQuote, setShowQuote] = useState(false);
 
@@ -33,11 +27,11 @@ const [showQuote, setShowQuote] = useState(false);
                     hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)]
                     transition-all duration-300 hover:-translate-y-1">
     <div className="overflow-hidden">
-      <img
-          src={imageSrc}
-        alt={item.name}
-        className="h-48 w-full object-cover"
-      />
+     <img
+  src={item.image}
+  alt={item.name}
+  className="h-48 w-full object-cover"
+/>
 </div>
       
       <div className="p-4">
@@ -49,11 +43,6 @@ const [showQuote, setShowQuote] = useState(false);
           <FaMapMarkerAlt size={12} />
           {item.location}
         </p>
-
-        <div className="flex items-center gap-1 mt-2">
-          <FaStar className="text-yellow-400" size={14} />
-          <span className="text-sm">{item.rating}</span>
-        </div>
 
         <div className="flex items-center justify-between mt-4">
           <p className="font-semibold">

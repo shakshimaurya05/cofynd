@@ -106,7 +106,7 @@ export default function LeadForm() {
 
               <button
                 onClick={handleSubmit}
-                className="bg-yellow-400 hover:bg-yellow-500 rounded-full px-6 py-3"
+                className="bg-[#084B87] hover:bg-blue-500 rounded-full px-6 py-3 text-white"
               >
                 Submit
               </button>
@@ -132,7 +132,7 @@ export default function LeadForm() {
             </p>
             <button
               onClick={() => setShowSuccess(false)}
-              className="bg-yellow-400 px-6 py-2 rounded-full"
+              className="bg-orange-400 px-6 py-2 rounded-full"
             >
               Close
             </button>

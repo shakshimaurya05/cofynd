@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import logo from "../assets/logos/mainLogo.png"
+
 export default function HeroLeadForm() {
   const [formData, setFormData] = useState({
     name: "",

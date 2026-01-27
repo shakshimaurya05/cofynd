@@ -42,7 +42,7 @@ export default function AboutCoworkSpaze() {
           viewport={{ once: true }}
           className="flex justify-center"
         >
-          <div className="w-72 h-72 md:w-96 md:h-96 rounded-full overflow-hidden border-[6px] border-white shadow-xl">
+          <div className="w-72 h-72 md:w-96 md:h-96 rounded-full overflow-hidden border-[6px] border-blue shadow-xl">
             <img
               src={aboutImg}
               alt="Coworking Space Gurgaon"
