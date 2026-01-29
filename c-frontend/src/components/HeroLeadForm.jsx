@@ -11,6 +11,7 @@ export default function HeroLeadForm() {
   });
 
   const [showSuccess, setShowSuccess] = useState(false);
+  const [loading, setLoading] = useState(false); // IMPORTANT
 
   const handleChange = (e) => {
     setFormData({
@@ -20,14 +21,17 @@ export default function HeroLeadForm() {
   };
 
   const handleSubmit = async () => {
+    if (loading) return; // prevent double submit
+
+    setLoading(true);
+    setShowSuccess(true); //  SHOW POPUP IMMEDIATELY
+
     try {
       await fetch("http://localhost:5000/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-
-      setShowSuccess(true);
 
       setFormData({
         name: "",
@@ -38,6 +42,8 @@ export default function HeroLeadForm() {
       });
     } catch (error) {
       console.error("Error submitting lead:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -56,7 +62,6 @@ export default function HeroLeadForm() {
           shadow-xl
         "
       >
-  
         <h3 className="text-2xl font-semibold mb-2">
           Get Free Consultation
         </h3>
@@ -70,7 +75,7 @@ export default function HeroLeadForm() {
             value={formData.name}
             onChange={handleChange}
             placeholder="Name*"
-            className="w-full bg-white/20 border border-white/30 rounded-lg px-4 py-3 text-white placeholder-white/60 focus:outline-none"
+            className="w-full bg-white/20 border border-white/30 rounded-lg px-4 py-3 text-white placeholder-white/60  focus:outline-none"
           />
 
           <input
@@ -95,24 +100,36 @@ export default function HeroLeadForm() {
             onChange={handleChange}
             className="w-full bg-white/20 border border-white/30 rounded-lg px-4 py-3 text-white focus:outline-none"
           >
-            <option value="">Select City</option>
-            <option value="gurgaon">Gurugram</option>
+            <option value="" className="text-black">
+              Select City
+            </option>
+            <option value="gurgaon" className="text-black">
+              Gurugram
+            </option>
           </select>
 
           <button
+            disabled={loading}
             onClick={handleSubmit}
-            className="w-full bg-yellow-400 text-black py-3 rounded-lg font-medium hover:bg-yellow-500 transition"
+            className={`w-full py-3 rounded-lg font-medium transition
+              ${
+                loading
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-yellow-400 text-black hover:bg-yellow-500"
+              }`}
           >
-            Submit
+            {loading ? "Submitting..." : "Submit"}
           </button>
         </div>
       </motion.div>
 
-      {/* SUCCESS MODAL */}
+      {/* SUCCESS POPUP */}
       {showSuccess && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl p-8 text-center">
-            <h3 className="text-xl font-semibold mb-3">Thank you!</h3>
+            <h3 className="text-xl font-semibold mb-3">
+              Thank you!
+            </h3>
             <p className="text-gray-600 mb-6">
               Our team will contact you shortly.
             </p>
