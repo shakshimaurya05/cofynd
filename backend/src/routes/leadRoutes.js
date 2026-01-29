@@ -49,5 +49,8 @@ router.post('/',async(req,res) => {
       message : err.message
     });
   }
-})
+}); // This was missing - proper closing of the POST route
 
+
+
+module.exports = router;
