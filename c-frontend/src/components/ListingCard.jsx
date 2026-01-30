@@ -15,6 +15,8 @@ const [showQuote, setShowQuote] = useState(false);
     <motion.div
   initial={{ opacity: 0, y: 40 }}
   whileInView={{ opacity: 1, y: 0 }}
+  loading="eager"
+  decoding="async"
   viewport={{ once: true }}
   transition={{ duration: 0.6, ease: "easeOut" }}
   onClick={() => navigate(`/space/${item._id}`)}
