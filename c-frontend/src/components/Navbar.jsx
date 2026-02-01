@@ -41,11 +41,20 @@ export default function Navbar() {
   onClick={() => navigate("/")}
   className="flex items-center cursor-pointer"
 >
+<div className="flex items-center overflow-visible w-[140px] sm:w-[180px] md:w-[220px]">
   <img
-    src={logo}  
+    src={logo}
     alt="CoworkSpaze Logo"
-    className="h-10 w-auto scale-[3.8] mr-10"
+    className="
+      h-10 sm:h-12
+      w-auto
+      scale-[2.2] sm:scale-[2.6] md:scale-[3]
+      origin-left
+      object-contain
+    "
   />
+</div>
+
 </div>
 
 

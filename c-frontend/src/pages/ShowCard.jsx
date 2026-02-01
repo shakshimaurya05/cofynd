@@ -133,10 +133,10 @@ export default function ShowCard() {
           transition={{ duration: 0.5, delay: i * 0.12 }}
           className="bg-white rounded-2xl shadow-md overflow-hidden"
         >
-          <div className="grid grid-cols-1 md:grid-cols-4 min-h-[200px]">
+          <div className="grid grid-cols-1 md:grid-cols-4 h-[220px]">
             
             {/* LEFT IMAGE */}
-            <div className="md:col-span-1 h-[220px] md:h-full overflow-hidden">
+            <div className="md:col-span-1 h-full overflow-hidden">
               <img
                 src={planImage}
                 alt={plan.title}

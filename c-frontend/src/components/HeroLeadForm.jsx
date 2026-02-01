@@ -11,20 +11,36 @@ export default function HeroLeadForm() {
   });
 
   const [showSuccess, setShowSuccess] = useState(false);
-  const [loading, setLoading] = useState(false); // IMPORTANT
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
+    setError(""); 
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
 
+  const isFormValid = () => {
+    if (!formData.name.trim()) return false;
+    if (!formData.email.trim()) return false;
+    if (!formData.phone.trim()) return false;
+    if (!formData.city) return false;
+    return true;
+  };
+
   const handleSubmit = async () => {
-    if (loading) return; // prevent double submit
+    if (loading) return;
+
+ 
+    if (!isFormValid()) {
+      setError("Please fill all required fields");
+      return;
+    }
 
     setLoading(true);
-    setShowSuccess(true); //  SHOW POPUP IMMEDIATELY
+    setShowSuccess(true); 
 
     try {
       await fetch("http://localhost:5000/api/leads", {
@@ -75,7 +91,9 @@ export default function HeroLeadForm() {
             value={formData.name}
             onChange={handleChange}
             placeholder="Name*"
-            className="w-full bg-white/20 border border-white/30 rounded-lg px-4 py-3 text-white placeholder-white/60  focus:outline-none"
+            className="w-full bg-white/20 border border-white/30 rounded-lg px-4 py-3
+                       text-white placeholder-white/60 caret-white
+                       focus:outline-none"
           />
 
           <input
@@ -83,7 +101,9 @@ export default function HeroLeadForm() {
             value={formData.email}
             onChange={handleChange}
             placeholder="Email*"
-            className="w-full bg-white/20 border border-white/30 rounded-lg px-4 py-3 text-white placeholder-white/60 focus:outline-none"
+            className="w-full bg-white/20 border border-white/30 rounded-lg px-4 py-3
+                       text-white placeholder-white/60 caret-white
+                       focus:outline-none"
           />
 
           <input
@@ -91,14 +111,17 @@ export default function HeroLeadForm() {
             value={formData.phone}
             onChange={handleChange}
             placeholder="Phone*"
-            className="w-full bg-white/20 border border-white/30 rounded-lg px-4 py-3 text-white placeholder-white/60 focus:outline-none"
+            className="w-full bg-white/20 border border-white/30 rounded-lg px-4 py-3
+                       text-white placeholder-white/60 caret-white
+                       focus:outline-none"
           />
 
           <select
             name="city"
             value={formData.city}
             onChange={handleChange}
-            className="w-full bg-white/20 border border-white/30 rounded-lg px-4 py-3 text-white focus:outline-none"
+            className="w-full bg-white/20 border border-white/30 rounded-lg px-4 py-3
+                       text-white focus:outline-none"
           >
             <option value="" className="text-black">
               Select City
@@ -120,6 +143,13 @@ export default function HeroLeadForm() {
           >
             {loading ? "Submitting..." : "Submit"}
           </button>
+
+        
+          {error && (
+            <p className="text-white/80 text-sm mt-2">
+              {error}
+            </p>
+          )}
         </div>
       </motion.div>
 

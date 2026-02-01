@@ -3,8 +3,6 @@ import { motion } from "framer-motion";
 import { FaTimes, FaCheckCircle, FaEnvelope } from "react-icons/fa";
 
 export default function ContactModal({ onClose }) {
-  const [showSuccess, setShowSuccess] = useState(false);
-
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -13,25 +11,65 @@ export default function ContactModal({ onClose }) {
     city: "",
   });
 
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleChange = (e) => {
+    setError("");
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const isFormValid = () => {
+    if (!form.name.trim()) return false;
+    if (!form.email.trim()) return false;
+    if (!form.phone.trim()) return false;
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (loading) return;
 
-    await fetch("http://localhost:5000/api/leads", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        ...form,
-        spaceType: form.spaceType || "general",
-        city: form.city || "india",
-      }),
-    });
+    if (!isFormValid()) {
+      setError("Please fill all required fields");
+      return;
+    }
 
-    setShowSuccess(true);
+    setLoading(true);
+    setShowSuccess(true); 
+
+    try {
+      await fetch("http://localhost:5000/api/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...form,
+          spaceType: form.spaceType || "general",
+          city: form.city || "india",
+        }),
+      });
+
+      setForm({
+        name: "",
+        email: "",
+        phone: "",
+        spaceType: "",
+        city: "",
+      });
+    } catch (err) {
+      console.error("Error submitting lead:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <>
-    
+      {/* BACKDROP */}
       <motion.div
         className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[999]"
         initial={{ opacity: 0 }}
@@ -40,7 +78,7 @@ export default function ContactModal({ onClose }) {
         onClick={onClose}
       />
 
-
+      {/* RIGHT PANEL */}
       <motion.div
         className="fixed inset-y-0 right-0 z-[1000] w-full max-w-xl"
         initial={{ x: "100%" }}
@@ -49,7 +87,6 @@ export default function ContactModal({ onClose }) {
         transition={{ duration: 0.55, ease: "easeOut" }}
       >
         <div className="h-full bg-white/10 backdrop-blur-xl border-l border-white/30 text-white relative">
-
           {/* CLOSE */}
           <button
             onClick={onClose}
@@ -59,7 +96,6 @@ export default function ContactModal({ onClose }) {
           </button>
 
           <div className="h-full overflow-y-auto p-8 flex flex-col">
-
             {/* HEADER */}
             <div className="mb-6">
               <h2 className="text-2xl font-semibold mb-2">
@@ -80,7 +116,7 @@ export default function ContactModal({ onClose }) {
                 "Free expert assistance",
               ].map((item) => (
                 <div key={item} className="flex items-center gap-2">
-                  <FaCheckCircle className="text-white" />
+                  <FaCheckCircle />
                   <span className="text-white/80">{item}</span>
                 </div>
               ))}
@@ -89,35 +125,39 @@ export default function ContactModal({ onClose }) {
             {/* FORM */}
             <form onSubmit={handleSubmit} className="space-y-4 mt-auto">
               <input
-                placeholder="Full Name"
-                className="w-full bg-transparent border border-white/40 rounded-lg px-4 py-2 text-white placeholder-white/60 focus:outline-none focus:border-white"
-                onChange={(e) =>
-                  setForm({ ...form, name: e.target.value })
-                }
+                name="name"
+                placeholder="Full Name*"
+                value={form.name}
+                onChange={handleChange}
+                className="w-full bg-transparent border border-white/40 rounded-lg px-4 py-2
+                           text-white placeholder-white/60 caret-white focus:outline-none"
               />
 
               <input
-                placeholder="Email Address"
-                className="w-full bg-transparent border border-white/40 rounded-lg px-4 py-2 text-white placeholder-white/60 focus:outline-none focus:border-white"
-                onChange={(e) =>
-                  setForm({ ...form, email: e.target.value })
-                }
+                name="email"
+                placeholder="Email Address*"
+                value={form.email}
+                onChange={handleChange}
+                className="w-full bg-transparent border border-white/40 rounded-lg px-4 py-2
+                           text-white placeholder-white/60 caret-white focus:outline-none"
               />
 
               <input
-                placeholder="Mobile Number"
-                className="w-full bg-transparent border border-white/40 rounded-lg px-4 py-2 text-white placeholder-white/60 focus:outline-none focus:border-white"
-                onChange={(e) =>
-                  setForm({ ...form, phone: e.target.value })
-                }
+                name="phone"
+                placeholder="Mobile Number*"
+                value={form.phone}
+                onChange={handleChange}
+                className="w-full bg-transparent border border-white/40 rounded-lg px-4 py-2
+                           text-white placeholder-white/60 caret-white focus:outline-none"
               />
 
               <div className="grid grid-cols-2 gap-3">
                 <select
-                  className="bg-transparent border border-white/40 rounded-lg px-3 py-2 text-sm text-white focus:outline-none"
-                  onChange={(e) =>
-                    setForm({ ...form, spaceType: e.target.value })
-                  }
+                  name="spaceType"
+                  value={form.spaceType}
+                  onChange={handleChange}
+                  className="bg-transparent border border-white/40 rounded-lg px-3 py-2
+                             text-sm text-white focus:outline-none"
                 >
                   <option value="" className="text-black">
                     Space Type
@@ -128,29 +168,45 @@ export default function ContactModal({ onClose }) {
                 </select>
 
                 <select
-                  className="bg-transparent border border-white/40 rounded-lg px-3 py-2 text-sm text-white focus:outline-none"
-                  onChange={(e) =>
-                    setForm({ ...form, city: e.target.value })
-                  }
+                  name="city"
+                  value={form.city}
+                  onChange={handleChange}
+                  className="bg-transparent border border-white/40 rounded-lg px-3 py-2
+                             text-sm text-white focus:outline-none"
                 >
                   <option value="" className="text-black">
                     Preferred City
                   </option>
-                  <option value="gurgaon" className="text-black ">
+                  <option value="gurgaon" className="text-black">
                     Gurugram
                   </option>
                 </select>
               </div>
 
-              <button className="w-full border border-white rounded-lg py-2 text-white font-medium hover:bg-yellow-500 hover:text-black transition">
-                Get Recommendations
+              <button
+                disabled={loading}
+                className={`w-full rounded-lg py-2 font-medium transition
+                  ${
+                    loading
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : "border border-white hover:bg-yellow-500 hover:text-black"
+                  }`}
+              >
+                {loading ? "Submitting..." : "Get Recommendations"}
               </button>
+
+              {/* INLINE ERROR */}
+              {error && (
+                <p className="text-white/80 text-sm mt-2">
+                  {error}
+                </p>
+              )}
             </form>
 
             {/* FOOTER */}
             <div className="mt-6 flex items-center gap-2 text-sm text-white/70">
               <FaEnvelope />
-              <span>coworkspaze@gmail.com.com</span>
+              <span>coworkspaze@gmail.com</span>
             </div>
           </div>
         </div>
@@ -163,7 +219,8 @@ export default function ContactModal({ onClose }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
         >
-          <div className="border border-white/40 bg-white/10 backdrop-blur-xl text-white rounded-xl p-8 text-center">
+          <div className="border border-white/40 bg-white/10 backdrop-blur-xl
+                          text-white rounded-xl p-8 text-center">
             <h3 className="text-2xl font-semibold mb-2">
               Request Submitted
             </h3>
@@ -175,7 +232,8 @@ export default function ContactModal({ onClose }) {
                 setShowSuccess(false);
                 onClose();
               }}
-              className="border border-white px-6 py-2 rounded-full hover:bg-white hover:text-black transition"
+              className="border border-white px-6 py-2 rounded-full
+                         hover:bg-white hover:text-black transition"
             >
               Close
             </button>

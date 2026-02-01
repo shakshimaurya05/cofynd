@@ -11,16 +11,32 @@ export default function GetQuote({ spaceTitle, spaceLocation }) {
 
   const [showSuccess, setShowSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
+    setError(""); 
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
 
+  const isFormValid = () => {
+    if (!formData.name.trim()) return false;
+    if (!formData.email.trim()) return false;
+    if (!formData.phone.trim()) return false;
+    if (!formData.type) return false;
+    if (!formData.seats) return false;
+    return true;
+  };
+
   const handleSubmit = async () => {
-    if (loading) return; 
+    if (loading) return;
+
+    if (!isFormValid()) {
+      setError("Please fill all required fields");
+      return;
+    }
 
     setLoading(true);
     setShowSuccess(true); 
@@ -37,7 +53,6 @@ export default function GetQuote({ spaceTitle, spaceLocation }) {
         }),
       });
 
-      // reset form
       setFormData({
         name: "",
         email: "",
@@ -138,6 +153,13 @@ export default function GetQuote({ spaceTitle, spaceLocation }) {
           >
             {loading ? "Submitting..." : "Enquire Now"}
           </button>
+
+      
+          {error && (
+            <p className="text-red-500 text-sm mt-2 text-center">
+              {error}
+            </p>
+          )}
         </div>
 
         {/* FOOTER */}

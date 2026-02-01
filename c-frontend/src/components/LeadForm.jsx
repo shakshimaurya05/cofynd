@@ -12,17 +12,32 @@ export default function LeadForm() {
   });
 
   const [showSuccess, setShowSuccess] = useState(false);
-  const [loading, setLoading] = useState(false); //  important
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
+    setError("");
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
 
+  const isFormValid = () => {
+    if (!formData.name.trim()) return false;
+    if (!formData.email.trim()) return false;
+    if (!formData.phone.trim()) return false;
+    if (!formData.city) return false;
+    return true;
+  };
+
   const handleSubmit = async () => {
-    if (loading) return; //  prevent double click
+    if (loading) return;
+
+    if (!isFormValid()) {
+      setError("Please fill all required fields");
+      return;
+    }
 
     setLoading(true);
     setShowSuccess(true);
@@ -36,7 +51,6 @@ export default function LeadForm() {
         body: JSON.stringify(formData),
       });
 
-      // reset form
       setFormData({
         name: "",
         email: "",
@@ -44,8 +58,8 @@ export default function LeadForm() {
         spaceType: "",
         city: "",
       });
-    } catch (error) {
-      console.error("Error submitting lead:", error);
+    } catch (err) {
+      console.error("Error submitting lead:", err);
     } finally {
       setLoading(false);
     }
@@ -58,7 +72,7 @@ export default function LeadForm() {
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
           className="bg-white rounded-3xl shadow p-8 md:p-12 flex flex-col md:flex-row gap-12"
         >
           {/* LEFT */}
@@ -118,6 +132,13 @@ export default function LeadForm() {
                 {loading ? "Submitting..." : "Submit"}
               </button>
             </div>
+
+            {/* INLINE ERROR */}
+            {error && (
+              <p className="text-red-500 text-sm mt-3">
+                {error}
+              </p>
+            )}
           </div>
 
           {/* RIGHT IMAGE */}
@@ -127,6 +148,8 @@ export default function LeadForm() {
                 src={propertyImg}
                 alt="Property"
                 className="w-full h-full object-cover"
+                loading="eager"
+                decoding="async"
               />
             </div>
           </div>
