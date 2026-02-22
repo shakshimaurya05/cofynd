@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function GetQuote({ spaceTitle, spaceLocation }) {
+export default function GetQuote({ spaceId}) {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -42,14 +42,14 @@ export default function GetQuote({ spaceTitle, spaceLocation }) {
     setShowSuccess(true); 
 
     try {
+      console.log("Sending spaceId:", spaceId);
       await fetch("http://localhost:5000/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
           source: "property-page-quote",
-          spaceTitle,
-          spaceLocation,
+          spaceId,
         }),
       });
 

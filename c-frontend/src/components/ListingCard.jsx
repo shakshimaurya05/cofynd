@@ -69,7 +69,7 @@ const [showQuote, setShowQuote] = useState(false);
       onClick={(e) => e.stopPropagation()}
       className="relative"
     >
-      <GetQuote />
+      <GetQuote spaceId={item._id} />
 
       {/* Close button */}
       <button
