@@ -97,12 +97,20 @@ router.post('/',async(req,res) => {
 
     // Send both emails
     console.log('Sending admin email...');
-    await transporter.sendMail(adminMailOptions);
-    console.log('Admin email sent!');
+    try {
+      await transporter.sendMail(adminMailOptions);
+      console.log('Admin email sent!');
+    } catch (emailErr) {
+      console.error('Admin email failed:', emailErr.message);
+    }
     
     console.log('Sending user email...');
-    await transporter.sendMail(userMailOptions);
-    console.log('User email sent!');
+    try {
+      await transporter.sendMail(userMailOptions);
+      console.log('User email sent!');
+    } catch (emailErr) {
+      console.error('User email failed:', emailErr.message);
+    }
 
     res.status(201).json(savedLead);
   }
