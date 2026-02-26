@@ -3,11 +3,37 @@ const express = require('express');
 const router = express.Router();
 const space = require('../models/space');
 
+// Default placeholder image URL
+const DEFAULT_IMAGE = 'https://res.cloudinary.com/dfwqyn3nf/image/upload/v1709000000/cofynd/placeholder/no-image-available.png';
+
+// Helper function to add default image if images array is empty
+const addDefaultImage = (spaces) => {
+  if (Array.isArray(spaces)) {
+    return spaces.map(space => ({
+      ...space.toObject(),
+      images: space.images && space.images.length > 0 
+        ? space.images 
+        : [DEFAULT_IMAGE]
+    }));
+  }
+  // For single space object
+  if (spaces) {
+    const spaceObj = spaces.toObject();
+    return {
+      ...spaceObj,
+      images: spaceObj.images && spaceObj.images.length > 0 
+        ? spaceObj.images 
+        : [DEFAULT_IMAGE]
+    };
+  }
+  return spaces;
+};
+
 //GET all spaces
 router.get('/',async(req,res) => {
   try{
     const spaces = await space.find();
-    res.json(spaces);
+    res.json(addDefaultImage(spaces));
   }
   catch(err){
     res.status(500).json({

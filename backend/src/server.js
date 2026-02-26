@@ -13,6 +13,10 @@ mongoose.connect(process.env.MONGODB_URL)
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+// Trust proxy for Render deployment (required for rate limiting)
+app.set('trust proxy', 1);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
