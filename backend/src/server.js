@@ -14,8 +14,14 @@ mongoose.connect(process.env.MONGODB_URL)
 const app = express();
 const PORT = process.env.PORT || 5000;
 app.use(express.json());
-app.use(express.urlencoded({ extended: true })); 
-app.use(cors());
+app.use(express.urlencoded({ extended: true }));
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true
+}));
+
+// Serve static files for emails (logo, etc.)
+app.use('/public', express.static('public'));
 
 //rate limiting for lead submissions
 const leadSubmissionLimiter = rateLimit({
@@ -26,7 +32,17 @@ const leadSubmissionLimiter = rateLimit({
   legacyHeaders : false
 })
 
+//rate limiting for quote submissions
+const quoteSubmissionLimiter = rateLimit({
+  windowMs: 60*60*1000, //60 mins
+  max: 3, //limit each IP to maximum 3 requests per windowMs
+  message : 'Too many quote submissions, try again after 1 hour',
+  standardHeaders: true,
+  legacyHeaders : false
+})
+
 app.use('/api/leads', leadSubmissionLimiter);
+app.use('/api/quotes', quoteSubmissionLimiter);
 
 //import and use space routes
 const spaceRoutes = require('./routes/spaceRoutes');
@@ -34,6 +50,10 @@ app.use('/api/spaces',spaceRoutes);
 //import and use lead routes
 const leadRoutes = require('./routes/leadRoutes');
 app.use('/api/leads' , leadRoutes);
+
+//import and use quote routes
+const quoteRoutes = require('./routes/quoteRoutes');
+app.use('/api/quotes', quoteRoutes);
 
 app.get('/',(req,res) => {
   res.json({
