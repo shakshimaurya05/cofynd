@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:5000/api/spaces";
+const BASE_URL = "https://coworkspaze.onrender.com/api/spaces";
 
 const mapSpace = (space) => ({
   _id: space._id,
