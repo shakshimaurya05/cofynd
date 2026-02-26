@@ -6,10 +6,15 @@ require('dotenv').config();
 
 // Create a transporter for sending mails
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
   auth: {
     user: process.env.MAIL_USER,
-    pass: process.env.MAIL_PASS
+    pass: process.env.MAIL_PASS?.replace(/\s/g, '') // Remove spaces from password
+  },
+  tls: {
+    rejectUnauthorized: false
   }
 });
 
