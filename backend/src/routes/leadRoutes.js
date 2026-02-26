@@ -21,6 +21,8 @@ const transporter =  nodemailer.createTransport({
 //POST A NEW LEAD
 router.post('/',async(req,res) => {
   try{
+    console.log('Lead request received:', req.body);
+    
     const leadData = {
       name : req.body.name,
       email: req.body.email,
@@ -29,9 +31,12 @@ router.post('/',async(req,res) => {
       city: req.body.city
     };
 
+    console.log('Saving lead to DB...');
     const savedLead = await Lead.create(leadData);
+    console.log('Lead saved successfully!');
 
     // 1. Send mail to admin
+    console.log('Sending admin email...');
     const adminMailOptions = {
       from : process.env.MAIL_USER,
       to : process.env.MAIL_USER,
@@ -91,18 +96,22 @@ router.post('/',async(req,res) => {
     };
 
     // Send both emails
+    console.log('Sending admin email...');
     await transporter.sendMail(adminMailOptions);
-    await transporter.sendMail(userMailOptions);
+    console.log('Admin email sent!');
     
+    console.log('Sending user email...');
+    await transporter.sendMail(userMailOptions);
+    console.log('User email sent!');
+
     res.status(201).json(savedLead);
   }
   catch(err){
+    console.error('Lead submission error:', err);
     res.status(400).json({
       message : err.message
     });
   }
-}); // This was missing - proper closing of the POST route
-
-
+});
 
 module.exports = router;
