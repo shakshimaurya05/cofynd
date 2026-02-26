@@ -139,12 +139,26 @@ router.post('/', async (req, res) => {
     };
 
     // Send both emails
-    await transporter.sendMail(adminMailOptions);
-    await transporter.sendMail(userMailOptions);
+    console.log('Sending admin email...');
+    try {
+      await transporter.sendMail(adminMailOptions);
+      console.log('Admin email sent!');
+    } catch (emailErr) {
+      console.error('Admin email failed:', emailErr.message);
+    }
+    
+    console.log('Sending user email...');
+    try {
+      await transporter.sendMail(userMailOptions);
+      console.log('User email sent!');
+    } catch (emailErr) {
+      console.error('User email failed:', emailErr.message);
+    }
 
     res.status(201).json(savedQuote);
   }
   catch (err) {
+    console.error('Quote submission error:', err);
     res.status(400).json({
       message: err.message
     });
