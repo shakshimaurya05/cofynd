@@ -4,6 +4,7 @@ import { FaTimes, FaCheckCircle, FaEnvelope } from "react-icons/fa";
 
 export default function ContactModal({ onClose }) {
   const [showSuccess, setShowSuccess] = useState(false);
+  const [error, setError] = useState("");
 
   const [form, setForm] = useState({
     name: "",
@@ -15,6 +16,29 @@ export default function ContactModal({ onClose }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+
+    // Validate required fields
+    if (!form.name.trim()) {
+      setError("Name is required");
+      return;
+    }
+    if (!form.email.trim()) {
+      setError("Email is required");
+      return;
+    }
+    if (!form.phone.trim()) {
+      setError("Phone number is required");
+      return;
+    }
+    if (!form.spaceType) {
+      setError("Please select a space type");
+      return;
+    }
+    if (!form.city) {
+      setError("Please select a city");
+      return;
+    }
 
     await fetch("http://localhost:5000/api/leads", {
       method: "POST",
@@ -27,6 +51,13 @@ export default function ContactModal({ onClose }) {
     });
 
     setShowSuccess(true);
+    setForm({
+      name: "",
+      email: "",
+      phone: "",
+      spaceType: "",
+      city: "",
+    });
   };
 
   return (
@@ -88,6 +119,12 @@ export default function ContactModal({ onClose }) {
 
             {/* FORM */}
             <form onSubmit={handleSubmit} className="space-y-4 mt-auto">
+              {error && (
+                <div className="bg-red-500/20 border border-red-400 text-red-100 px-4 py-3 rounded-lg text-sm">
+                  ⚠️ {error}
+                </div>
+              )}
+
               <input
                 placeholder="Full Name"
                 className="w-full bg-transparent border border-white/40 rounded-lg px-4 py-2 text-white placeholder-white/60 focus:outline-none focus:border-white"

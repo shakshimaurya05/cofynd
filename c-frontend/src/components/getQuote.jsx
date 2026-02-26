@@ -11,27 +11,51 @@ export default function GetQuote({ spaceTitle, spaceLocation }) {
 
   const [showSuccess, setShowSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
+    setError(""); // Clear error on change
   };
 
   const handleSubmit = async () => {
-    if (loading) return; 
+    if (loading) return;
+
+    // Validate all fields
+    if (!formData.name.trim()) {
+      setError("Name is required");
+      return;
+    }
+    if (!formData.email.trim()) {
+      setError("Email is required");
+      return;
+    }
+    if (!formData.phone.trim()) {
+      setError("Phone number is required");
+      return;
+    }
+    if (!formData.type) {
+      setError("Please select a workspace type");
+      return;
+    }
+    if (!formData.seats) {
+      setError("Please select number of seats");
+      return;
+    }
 
     setLoading(true);
-    setShowSuccess(true); 
+    setError("");
+    setShowSuccess(true);
 
     try {
-      await fetch("http://localhost:5000/api/leads", {
+      await fetch("http://localhost:5000/api/quotes", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
-          source: "property-page-quote",
           spaceTitle,
           spaceLocation,
         }),
@@ -74,6 +98,12 @@ export default function GetQuote({ spaceTitle, spaceLocation }) {
 
         {/* FORM */}
         <div className="mt-6 space-y-4">
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm">
+              ⚠️ {error}
+            </div>
+          )}
+
           <input
             name="name"
             value={formData.name}

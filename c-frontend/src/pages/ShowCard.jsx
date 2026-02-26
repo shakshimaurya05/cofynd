@@ -184,7 +184,7 @@ export default function ShowCard() {
               transition={{ duration: 0.8, ease: "easeOut" }}
               className="flex justify-center px-4"
             >
-              <GetQuote />
+              <GetQuote spaceTitle={spaceData.companyName} spaceLocation={spaceData.microLocation} />
             </motion.div>
           </div>
         </div>
