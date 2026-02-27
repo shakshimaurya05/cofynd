@@ -1,22 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const Quote = require('../models/Quote');
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 require('dotenv').config();
 
-// Create a transporter for sending mails
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
-  auth: {
-    user: process.env.MAIL_USER,
-    pass: process.env.MAIL_PASS?.replace(/\s/g, '') // Remove spaces from password
-  },
-  tls: {
-    rejectUnauthorized: false
-  }
-});
+// Initialize Resend
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 // POST A NEW QUOTE REQUEST
 router.post('/', async (req, res) => {
@@ -138,21 +127,46 @@ router.post('/', async (req, res) => {
       `
     };
 
-    // Send both emails
-    console.log('Sending admin email...');
-    try {
-      await transporter.sendMail(adminMailOptions);
-      console.log('Admin email sent!');
-    } catch (emailErr) {
-      console.error('Admin email failed:', emailErr.message);
-    }
+    // Send both emails using Resend
+    console.log('Sending emails via Resend...');
     
-    console.log('Sending user email...');
     try {
-      await transporter.sendMail(userMailOptions);
+      // Admin email
+      await resend.emails.send({
+        from: 'CoworkSpaze <onboarding@resend.dev>',
+        to: [process.env.MAIL_USER],
+        subject: 'New Quote Request - CoworkSpaze',
+        html: `
+          <h2>New Quote Request Received</h2>
+          <p><strong>Name:</strong> ${quoteData.name}</p>
+          <p><strong>Email:</strong> ${quoteData.email}</p>
+          <p><strong>Phone:</strong> ${quoteData.phone}</p>
+          <p><strong>Interested In:</strong> ${quoteData.type || 'Not specified'}</p>
+          <p><strong>Seats Required:</strong> ${quoteData.seats || 'Not specified'}</p>
+          <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+          <h3>Space Details</h3>
+          <p><strong>Property:</strong> ${quoteData.spaceTitle}</p>
+          <p><strong>Location:</strong> ${quoteData.spaceLocation}</p>
+          <p><strong>Submitted at:</strong> ${new Date().toLocaleString()}</p>
+        `
+      });
+      console.log('Admin email sent!');
+
+      // User confirmation email
+      await resend.emails.send({
+        from: 'CoworkSpaze <onboarding@resend.dev>',
+        to: [quoteData.email],
+        subject: `Quote Request for ${quoteData.spaceTitle} - CoworkSpaze`,
+        html: `
+          <h2>Hi ${quoteData.name}! 👋</h2>
+          <p>Thank you for your interest in ${quoteData.spaceTitle}!</p>
+          <p>Our team will contact you within 24-48 hours with a customized quote.</p>
+          <p><strong>CoworkSpaze Team</strong></p>
+        `
+      });
       console.log('User email sent!');
     } catch (emailErr) {
-      console.error('User email failed:', emailErr.message);
+      console.error('Email sending failed:', emailErr.message);
     }
 
     res.status(201).json(savedQuote);
