@@ -11,12 +11,12 @@ const nodemailer = require("nodemailer");
 // POST A NEW QUOTE REQUEST
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
+  host: "smtp.hostinger.com",
   port: 587,
   secure: false,
   requireTLS: true,
   auth: {
-    user: "coworkspaze@gmail.com",
+    user: "info@coworkspaze.com",
     pass: process.env.MAIL_PASSWORD
   },
   logger: true,
