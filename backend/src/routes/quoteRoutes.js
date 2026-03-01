@@ -1,11 +1,9 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
- const nodemailer = require("nodemailer");
+const nodemailer = require("nodemailer");
 // const Quote = require('../models/Quote');
 // const { Resend } = require('resend');
 // require('dotenv').config();
-
-
 
 // Initialize Resend
 // const resend = new Resend(process.env.RESEND_API_KEY);
@@ -21,7 +19,7 @@ const transporter = nodemailer.createTransport({
     pass: "",
   },
 });
-router.post('/', async (req, res) => {
+router.post("/", async (req, res) => {
   // try {
   //   const quoteData = {
   //     name: req.body.name,
@@ -142,7 +140,7 @@ router.post('/', async (req, res) => {
 
   //   // Send both emails using Resend
   //   console.log('Sending emails via Resend...');
-    
+
   //   try {
   //     // Admin email
   //     await resend.emails.send({
@@ -191,21 +189,21 @@ router.post('/', async (req, res) => {
   //   });
   // }
 
+  async function sendMail() {
+    await transporter.sendMail({
+      from: "coworkspaze@gmail.com",
+      to: "visheshsingh074@gmail.com",
+      subject: "Test Email",
+      text: "Hello from Node.js",
+      html: "<b>Hello from Node.js</b>",
+    });
+  }
 
-
-
-
-async function sendMail() {
-  await transporter.sendMail({
-    from: "coworkspaze@gmail.com",
-    to: "visheshsingh074@gmail.com",
-    subject: "Test Email",
-    text: "Hello from Node.js",
-    html: "<b>Hello from Node.js</b>",
-  });
-}
-
-sendMail();
+  try {
+    sendMail();
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 module.exports = router;
