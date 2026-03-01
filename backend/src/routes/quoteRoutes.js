@@ -12,12 +12,21 @@ const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
+  port: 587,
+  secure: false,
+  requireTLS: true,
   auth: {
     user: "coworkspaze@gmail.com",
-    pass: "",
+    pass: process.env.MAIL_PASSWORD
   },
+  logger: true,
+  debug: true,
+  tls: {
+    rejectUnauthorized: false, // important for some cloud env
+  },
+  connectionTimeout: 20000,
+  greetingTimeout: 20000,
+  socketTimeout: 20000
 });
 router.post("/", async (req, res) => {
   // try {
