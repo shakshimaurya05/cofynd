@@ -67,7 +67,7 @@ export default function FeaturedAndCTA() {
               <div className="mt-8 text-sm text-gray-700 space-y-2">
                 <div className="flex items-center gap-2">
                   <FaPhoneAlt className="text-sm" />
-                  <span>+91 9311 32 8049</span>
+                  <span>+91 9953802902</span>
                 </div>
 
                 <div className="flex items-center gap-2">

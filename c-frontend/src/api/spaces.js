@@ -1,4 +1,9 @@
-const BASE_URL = "https://coworkspaze.onrender.com/api/spaces";
+const BASE_URL = "http://localhost:5000/api/spaces";
+
+const optimizeCloudinaryUrl = (url) => {
+  if (!url || !url.includes('cloudinary')) return url;
+  return url.replace('/upload/', '/upload/f_auto,q_auto,w_400/');
+};
 
 const mapSpace = (space) => ({
   _id: space._id,
@@ -10,18 +15,45 @@ const mapSpace = (space) => ({
     space.pricing?.dedicatedSeat ||
     space.pricing?.cabinSeat ||
     0,
-  image: space.images?.[0],
-  images: space.images,
+  image: optimizeCloudinaryUrl(space.images?.[0]),
+  images: space.images?.map(optimizeCloudinaryUrl) || [],
 });
 
-export async function fetchSpaces({ city }) {
+export async function fetchSpaces({ city, page = 1, limit = 20 }) {
   let url = BASE_URL;
   if (city) url = `${BASE_URL}/city/${city}`;
+
+  url += `?page=${page}&limit=${limit}`;
 
   const res = await fetch(url);
   const data = await res.json();
 
-  return data.map(mapSpace);
+  // Handle paginated response
+  if (data.spaces) {
+    return {
+      spaces: data.spaces.map(mapSpace),
+      pagination: data.pagination
+    };
+  }
+
+  // Handle non-paginated response (for other routes)
+  return { spaces: data.map(mapSpace), pagination: null };
+}
+
+export async function fetchSpacesByLocation({ city, microLocation, page = 1, limit = 20 }) {
+  const url = `${BASE_URL}/city/${city}/microLocation/${encodeURIComponent(microLocation)}?page=${page}&limit=${limit}`;
+  
+  const res = await fetch(url);
+  const data = await res.json();
+
+  if (data.spaces) {
+    return {
+      spaces: data.spaces.map(mapSpace),
+      pagination: data.pagination
+    };
+  }
+
+  return { spaces: (data || []).map(mapSpace), pagination: null };
 }
 
 
