@@ -9,6 +9,11 @@ import Footer from "../components/Footer";
 
 import { fetchSpaceById } from "../api/spaces";
 
+const optimizeCloudinaryUrl = (url) => {
+  if (!url || !url.includes('cloudinary')) return url;
+  return url.replace('/upload/', '/upload/f_auto,q_auto,w_800/');
+};
+
 export default function ShowCard() {
   const { id } = useParams();
   const [spaceData, setSpaceData] = useState(null);
@@ -16,7 +21,13 @@ export default function ShowCard() {
 
   useEffect(() => {
     fetchSpaceById(id)
-      .then((data) => setSpaceData(data))
+      .then((data) => {
+        // Optimize image URLs
+        if (data.images) {
+          data.images = data.images.map(optimizeCloudinaryUrl);
+        }
+        setSpaceData(data);
+      })
       .catch((err) => console.error("Error loading space:", err));
   }, [id]);
 
@@ -32,7 +43,7 @@ export default function ShowCard() {
     );
   }
 
-  // Create seating plans 
+  // Create seating plans
   const plans = [];
 
   if (spaceData.pricing?.dedicatedSeat) {
@@ -90,6 +101,7 @@ export default function ShowCard() {
                 alt={spaceData.companyName}
                 onClick={() => setActiveImage(spaceData.images?.[0])}
                 className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                loading="eager"
               />
             </motion.div>
 
@@ -108,6 +120,7 @@ export default function ShowCard() {
                     alt="Workspace"
                     onClick={() => setActiveImage(img)}
                     className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                    loading="lazy"
                   />
                 </motion.div>
               ))}
@@ -134,13 +147,14 @@ export default function ShowCard() {
           className="bg-white rounded-2xl shadow-md overflow-hidden"
         >
           <div className="grid grid-cols-1 md:grid-cols-4 min-h-[200px]">
-            
+
             {/* LEFT IMAGE */}
             <div className="md:col-span-1 h-[220px] md:h-full overflow-hidden">
               <img
                 src={planImage}
                 alt={plan.title}
                 className="w-full h-full object-cover"
+                loading="lazy"
               />
             </div>
 

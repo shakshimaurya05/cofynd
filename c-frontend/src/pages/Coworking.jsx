@@ -7,7 +7,7 @@ import LeadForm from "../components/LeadForm";
 import coworkingImg from "../assets/hero2.webp";
 
 import { useParams } from "react-router-dom";
-import { fetchSpaces } from "../api/spaces";
+import { fetchSpaces, fetchSpacesByLocation } from "../api/spaces";
 import { useEffect, useState } from "react";
 
 import {
@@ -56,48 +56,92 @@ export default function Coworking() {
   const { city } = useParams();
 
   const [spaces, setSpaces] = useState([]);
+  const [allLocations, setAllLocations] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
   const [selectedLocation, setSelectedLocation] = useState("all");
 
-  // default city if route is /coworking
- const normalizeCity = (city) => {
-  if (!city) return "gurugram";
-  if (city.toLowerCase() === "gurgaon") return "gurugram";
-  return city.toLowerCase();
-};
+  const normalizeCity = (city) => {
+    if (!city) return "gurugram";
+    if (city.toLowerCase() === "gurgaon") return "gurugram";
+    return city.toLowerCase();
+  };
 
-const activeCity = normalizeCity(city);
+  const activeCity = normalizeCity(city);
 
-  // fetch spaces whenever city changes
+  // Fetch all locations for the filter (no pagination limit)
   useEffect(() => {
-    fetchSpaces({ city: activeCity })
-      .then((data) => setSpaces(data))
-      .catch((err) => console.error(err));
+    fetchSpaces({ city: activeCity, page: 1, limit: 1000 })
+      .then((data) => {
+        const uniqueLocations = [
+          "all",
+          ...new Set(
+            (data.spaces || [])
+              .map((item) => item.location)
+              .filter(Boolean)
+          ),
+        ];
+        setAllLocations(uniqueLocations);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch locations:", err);
+        setAllLocations(["all"]);
+      });
   }, [activeCity]);
 
-  // reset microlocation filter when city changes
+  useEffect(() => {
+    setLoading(true);
+    setPage(1);
+    
+    // Fetch based on selected location
+    const fetchFn = selectedLocation === "all"
+      ? () => fetchSpaces({ city: activeCity, page: 1, limit: 20 })
+      : () => fetchSpacesByLocation({ city: activeCity, microLocation: selectedLocation, page: 1, limit: 20 });
+    
+    fetchFn()
+      .then((data) => {
+        setSpaces(data.spaces || []);
+        setHasMore(data.pagination?.hasMore || false);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setLoading(false);
+      });
+  }, [activeCity, selectedLocation]);
+
+  const loadMore = () => {
+    if (loading || !hasMore) return;
+    setLoading(true);
+    const nextPage = page + 1;
+    
+    // Load more based on selected location
+    const fetchFn = selectedLocation === "all"
+      ? () => fetchSpaces({ city: activeCity, page: nextPage, limit: 20 })
+      : () => fetchSpacesByLocation({ city: activeCity, microLocation: selectedLocation, page: nextPage, limit: 20 });
+    
+    fetchFn()
+      .then((data) => {
+        setSpaces(prev => [...prev, ...(data.spaces || [])]);
+        setPage(nextPage);
+        setHasMore(data.pagination?.hasMore || false);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setLoading(false);
+      });
+  };
+
   useEffect(() => {
     setSelectedLocation("all");
   }, [city]);
 
-  // generate microlocations dynamically
-  const locations = [
-    "all",
-    ...new Set(
-      spaces
-        .map((item) => item.location)
-        .filter(Boolean)
-    ),
-  ];
+  const locations = allLocations;
 
-  // filter spaces
-  const filteredSpaces =
-    selectedLocation === "all"
-      ? spaces
-      : spaces.filter(
-          (item) =>
-            item.location?.toLowerCase() ===
-            selectedLocation.toLowerCase()
-        );
+  // No need to filter client-side since backend already returns filtered spaces
+  const filteredSpaces = spaces;
 
   const heading = `Top Coworking Spaces in ${activeCity.replace("-", " ")}`;
 
@@ -105,7 +149,6 @@ const activeCity = normalizeCity(city);
     <>
       <Navbar />
 
-      {/* HERO + FEATURES ONLY ON /coworking */}
       {!city && (
         <>
           <section
@@ -132,14 +175,12 @@ const activeCity = normalizeCity(city);
         </>
       )}
 
-      {/* LISTINGS */}
       <section className="py-16 bg-[#FAFAFA]">
         <div className="max-w-7xl mx-auto px-4">
           <h2 className="text-3xl font-semibold mb-8">
             {heading}
           </h2>
 
-          {/* MICRLOCATION FILTER ONLY ON /coworking/:city */}
           {city && (
             <div className="mb-6 overflow-x-auto">
               <div className="flex gap-2 whitespace-nowrap pb-1">
@@ -163,6 +204,32 @@ const activeCity = normalizeCity(city);
           )}
 
           <ListingGrid listings={filteredSpaces} />
+          {loading && page === 1 && (
+            <div className="text-center py-12 text-gray-500">
+              Loading spaces...
+            </div>
+          )}
+          {loading && page > 1 && (
+            <div className="text-center py-8 text-gray-500">
+              Loading more...
+            </div>
+          )}
+          {!loading && filteredSpaces.length === 0 && page === 1 && (
+            <p className="text-gray-500 text-center py-12">
+              No spaces found.
+            </p>
+          )}
+          {!loading && hasMore && (
+            <div className="text-center mt-12">
+              <button
+                onClick={loadMore}
+                disabled={loading}
+                className="bg-blue-600 text-white px-8 py-3 rounded-full font-medium hover:bg-blue-700 transition disabled:bg-gray-400"
+              >
+                {loading ? "Loading..." : "Load More"}
+              </button>
+            </div>
+          )}
         </div>
       </section>
 

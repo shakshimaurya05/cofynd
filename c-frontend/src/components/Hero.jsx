@@ -56,7 +56,7 @@ useEffect(() => {
   transition={{
     duration: 25,
     ease: "linear",
-    repeat: Infinity,
+   repeat: Infinity,
     repeatType: "mirror",
   }}
 />

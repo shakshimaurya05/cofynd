@@ -7,6 +7,7 @@ import FeaturedCoworking from "../components/FeaturedCoworking";
 import LeadForm from "../components/LeadForm";
 import CTAStats from "../components/CTAStats";
 import HowItWorks from "../components/HowItWorks";
+import SuggestedSpaces from "../components/SuggestedSpaces";
 function Home() {
 
   return (
@@ -14,13 +15,15 @@ function Home() {
       <Navbar />
       <Hero  />
       <About />
-      <CTAStats />                                                                              
+      <CTAStats />
+        <SuggestedSpaces />
       <HowItWorks />
+    
       <LeadForm />
       <FeaturedCoworking />
       <Adv />
-      
-      
+
+
       <Footer />
     </>
   );
