@@ -54,28 +54,28 @@ export default function HeroLeadForm() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, ease: "easeOut", delay: 0.35 }}
         className="
-          w-full max-w-md
+          w-full max-w-sm
           border border-white/30
           bg-white/10 backdrop-blur-xl
-          rounded-2xl p-8
+          rounded-xl p-6
           text-white
           shadow-xl
         "
       >
-        <h3 className="text-2xl font-semibold mb-2">
+        <h3 className="text-xl font-semibold mb-2">
           Get Free Consultation
         </h3>
-        <p className="text-sm text-white/70 mb-6">
+        <p className="text-xs text-white/70 mb-4">
           Our coworking experts will reach out shortly
         </p>
 
-        <div className="space-y-4">
+        <div className="space-y-3">
           <input
             name="name"
             value={formData.name}
             onChange={handleChange}
             placeholder="Name*"
-            className="w-full bg-white/20 border border-white/30 rounded-lg px-4 py-3 text-white placeholder-white/60  focus:outline-none"
+            className="w-full bg-white/20 border border-white/30 rounded-lg px-3 py-2.5 text-white placeholder-white/60 text-sm focus:outline-none"
           />
 
           <input
@@ -83,7 +83,7 @@ export default function HeroLeadForm() {
             value={formData.email}
             onChange={handleChange}
             placeholder="Email*"
-            className="w-full bg-white/20 border border-white/30 rounded-lg px-4 py-3 text-white placeholder-white/60 focus:outline-none"
+            className="w-full bg-white/20 border border-white/30 rounded-lg px-3 py-2.5 text-white placeholder-white/60 text-sm focus:outline-none"
           />
 
           <input
@@ -91,14 +91,14 @@ export default function HeroLeadForm() {
             value={formData.phone}
             onChange={handleChange}
             placeholder="Phone*"
-            className="w-full bg-white/20 border border-white/30 rounded-lg px-4 py-3 text-white placeholder-white/60 focus:outline-none"
+            className="w-full bg-white/20 border border-white/30 rounded-lg px-3 py-2.5 text-white placeholder-white/60 text-sm focus:outline-none"
           />
 
           <select
             name="city"
             value={formData.city}
             onChange={handleChange}
-            className="w-full bg-white/20 border border-white/30 rounded-lg px-4 py-3 text-white focus:outline-none"
+            className="w-full bg-white/20 border border-white/30 rounded-lg px-3 py-2.5 text-white text-sm focus:outline-none"
           >
             <option value="" className="text-black">
               Select City
@@ -111,7 +111,7 @@ export default function HeroLeadForm() {
           <button
             disabled={loading}
             onClick={handleSubmit}
-            className={`w-full py-3 rounded-lg font-medium transition
+            className={`w-full py-2.5 rounded-lg font-medium text-sm transition
               ${
                 loading
                   ? "bg-gray-400 cursor-not-allowed"

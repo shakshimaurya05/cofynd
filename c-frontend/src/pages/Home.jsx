@@ -18,7 +18,6 @@ function Home() {
       <CTAStats />
         <SuggestedSpaces />
       <HowItWorks />
-    
       <LeadForm />
       <FeaturedCoworking />
       <Adv />

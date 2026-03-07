@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import logo from "../assets/logos/mainLogo.png"
+import logo from "../assets/logos/mainLogo2.png"
 import { AnimatePresence } from "framer-motion";
 import {
   FaSearch,
@@ -34,23 +34,24 @@ export default function Navbar() {
   return (
     <nav className="w-full bg-white border-b sticky top-0 z-50">
       {/* TOP BAR */}
-      <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-3">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 sm:py-3 flex items-center gap-2 sm:gap-3">
 
         {/* LOGO */}
-       <div
+       {/* LOGO */}
+<div
   onClick={() => navigate("/")}
-  className="flex items-center cursor-pointer"
+  className="flex items-center cursor-pointer flex-shrink-0 h-10 pl-2"
 >
   <img
-    src={logo}  
+    src={logo}
     alt="CoworkSpaze Logo"
-    className="h-10 w-auto scale-[3.8] mr-10"
+    className="h-full w-auto object-contain scale-150"
   />
 </div>
 
 
         {/* SEARCH */}
-        <div className="hidden sm:flex items-center border rounded-full px-4 py-2 flex-1 max-w-md ml-9">
+        <div className="hidden lg:flex items-center border rounded-full px-4 py-2 flex-1 max-w-md ml-4 sm:ml-9">
           <FaSearch className="text-gray-400 mr-2" />
           <input
             type="text"
