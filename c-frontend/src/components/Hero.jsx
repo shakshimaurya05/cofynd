@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import heroImg from "../assets/hero1.webp";
+import heroImg from "../assets/hero1.png";
 import { useEffect, useState, useMemo } from "react";
 import HeroLeadForm from "./HeroLeadForm";
 import logo from "../assets/logos/mainLogo.jpeg"
