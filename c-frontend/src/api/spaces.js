@@ -1,8 +1,8 @@
-const BASE_URL = "http://localhost:5000/api/spaces";
+const BASE_URL = "http://15.206.81.3:5000/api/spaces";
 
 const optimizeCloudinaryUrl = (url) => {
-  if (!url || !url.includes('cloudinary')) return url;
-  return url.replace('/upload/', '/upload/f_auto,q_auto,w_400/');
+  if (!url || !url.includes("cloudinary")) return url;
+  return url.replace("/upload/", "/upload/f_auto,q_auto,w_400/");
 };
 
 const mapSpace = (space) => ({
@@ -11,10 +11,7 @@ const mapSpace = (space) => ({
   location: space.microLocation,
   city: space.city,
   rating: space.rating || 4.5,
-  pricePerMonth:
-    space.pricing?.dedicatedSeat ||
-    space.pricing?.cabinSeat ||
-    0,
+  pricePerMonth: space.pricing?.dedicatedSeat || space.pricing?.cabinSeat || 0,
   image: optimizeCloudinaryUrl(space.images?.[0]),
   images: space.images?.map(optimizeCloudinaryUrl) || [],
 });
@@ -32,7 +29,7 @@ export async function fetchSpaces({ city, page = 1, limit = 20 }) {
   if (data.spaces) {
     return {
       spaces: data.spaces.map(mapSpace),
-      pagination: data.pagination
+      pagination: data.pagination,
     };
   }
 
@@ -40,22 +37,26 @@ export async function fetchSpaces({ city, page = 1, limit = 20 }) {
   return { spaces: data.map(mapSpace), pagination: null };
 }
 
-export async function fetchSpacesByLocation({ city, microLocation, page = 1, limit = 20 }) {
+export async function fetchSpacesByLocation({
+  city,
+  microLocation,
+  page = 1,
+  limit = 20,
+}) {
   const url = `${BASE_URL}/city/${city}/microLocation/${encodeURIComponent(microLocation)}?page=${page}&limit=${limit}`;
-  
+
   const res = await fetch(url);
   const data = await res.json();
 
   if (data.spaces) {
     return {
       spaces: data.spaces.map(mapSpace),
-      pagination: data.pagination
+      pagination: data.pagination,
     };
   }
 
   return { spaces: (data || []).map(mapSpace), pagination: null };
 }
-
 
 export async function fetchSpaceById(id) {
   const res = await fetch(`${BASE_URL}/${id}`);
