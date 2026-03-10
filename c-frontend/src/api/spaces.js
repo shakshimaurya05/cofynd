@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:5000/api/spaces";
+const BASE_URL = "https://api.coworkspaze.com/api/spaces";
 
 const optimizeCloudinaryUrl = (url) => {
   if (!url || !url.includes('cloudinary')) return url;
