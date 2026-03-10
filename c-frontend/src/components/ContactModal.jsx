@@ -5,6 +5,7 @@ import { FaTimes, FaCheckCircle, FaEnvelope } from "react-icons/fa";
 export default function ContactModal({ onClose }) {
   const [showSuccess, setShowSuccess] = useState(false);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const [form, setForm] = useState({
     name: "",
@@ -16,6 +17,8 @@ export default function ContactModal({ onClose }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (loading) return;
+
     setError("");
 
     // Validate required fields
@@ -40,24 +43,39 @@ export default function ContactModal({ onClose }) {
       return;
     }
 
-    await fetch("https://coworkspaze.onrender.com/api/leads", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        ...form,
-        spaceType: form.spaceType || "general",
-        city: form.city || "india",
-      }),
-    });
+    setLoading(true);
 
-    setShowSuccess(true);
-    setForm({
-      name: "",
-      email: "",
-      phone: "",
-      spaceType: "",
-      city: "",
-    });
+    try {
+      const response = await fetch("https://api.coworkspaze.com/api/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...form,
+          spaceType: form.spaceType || "general",
+          city: form.city || "india",
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to submit lead");
+      }
+
+      setShowSuccess(true);
+
+      setForm({
+        name: "",
+        email: "",
+        phone: "",
+        spaceType: "",
+        city: "",
+      });
+
+    } catch (err) {
+      console.error("Lead submit error:", err);
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -71,7 +89,6 @@ export default function ContactModal({ onClose }) {
         onClick={onClose}
       />
 
-
       <motion.div
         className="fixed inset-y-0 right-0 z-[1000] w-full max-w-xl"
         initial={{ x: "100%" }}
@@ -81,7 +98,6 @@ export default function ContactModal({ onClose }) {
       >
         <div className="h-full bg-white/10 backdrop-blur-xl border-l border-white/30 text-white relative">
 
-          {/* CLOSE */}
           <button
             onClick={onClose}
             className="absolute top-5 right-5 text-white/70 hover:text-white"
@@ -91,7 +107,6 @@ export default function ContactModal({ onClose }) {
 
           <div className="h-full overflow-y-auto p-8 flex flex-col">
 
-            {/* HEADER */}
             <div className="mb-6">
               <h2 className="text-2xl font-semibold mb-2">
                 Let’s Find the Right Workspace for You
@@ -102,7 +117,6 @@ export default function ContactModal({ onClose }) {
               </p>
             </div>
 
-            {/* FEATURES */}
             <div className="space-y-3 mb-8 text-sm">
               {[
                 "Personalized workspace recommendations",
@@ -117,7 +131,6 @@ export default function ContactModal({ onClose }) {
               ))}
             </div>
 
-            {/* FORM */}
             <form onSubmit={handleSubmit} className="space-y-4 mt-auto">
               {error && (
                 <div className="bg-red-500/20 border border-red-400 text-red-100 px-4 py-3 rounded-lg text-sm">
@@ -179,12 +192,18 @@ export default function ContactModal({ onClose }) {
                 </select>
               </div>
 
-              <button className="w-full border border-white rounded-lg py-2 text-white font-medium hover:bg-yellow-500 hover:text-black transition">
-                Get Recommendations
+              <button
+                disabled={loading}
+                className={`w-full border border-white rounded-lg py-2 text-white font-medium transition ${
+                  loading
+                    ? "opacity-50 cursor-not-allowed"
+                    : "hover:bg-yellow-500 hover:text-black"
+                }`}
+              >
+                {loading ? "Submitting..." : "Get Recommendations"}
               </button>
             </form>
 
-            {/* FOOTER */}
             <div className="mt-6 flex items-center gap-2 text-sm text-white/70">
               <FaEnvelope />
               <span>coworkspaze@gmail.com.com</span>
@@ -193,7 +212,6 @@ export default function ContactModal({ onClose }) {
         </div>
       </motion.div>
 
-      {/* SUCCESS */}
       {showSuccess && (
         <motion.div
           className="fixed inset-0 z-[1100] flex items-center justify-center bg-black/70"

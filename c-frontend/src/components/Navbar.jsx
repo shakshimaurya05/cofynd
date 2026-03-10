@@ -37,7 +37,6 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 sm:py-3 flex items-center gap-2 sm:gap-3">
 
         {/* LOGO */}
-       {/* LOGO */}
 <div
   onClick={() => navigate("/")}
   className="flex items-center cursor-pointer flex-shrink-0 h-10 pl-2"

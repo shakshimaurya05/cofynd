@@ -51,7 +51,7 @@ export default function GetQuote({ spaceTitle, spaceLocation }) {
     setShowSuccess(true);
 
     try {
-      await fetch("https://coworkspaze.onrender.com/api/quotes", {
+      await fetch("https://api.coworkspaze.com/api/quotes", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

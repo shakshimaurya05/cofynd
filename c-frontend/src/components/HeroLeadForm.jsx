@@ -11,27 +11,54 @@ export default function HeroLeadForm() {
   });
 
   const [showSuccess, setShowSuccess] = useState(false);
-  const [loading, setLoading] = useState(false); // IMPORTANT
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
+    setError("");
   };
 
   const handleSubmit = async () => {
-    if (loading) return; // prevent double submit
+    if (loading) return;
+
+    if (!formData.name.trim()) {
+      setError("Name is required");
+      return;
+    }
+
+    if (!formData.email.trim()) {
+      setError("Email is required");
+      return;
+    }
+
+    if (!formData.phone.trim()) {
+      setError("Phone number is required");
+      return;
+    }
+
+    if (!formData.city) {
+      setError("City is required");
+      return;
+    }
 
     setLoading(true);
-    setShowSuccess(true); //  SHOW POPUP IMMEDIATELY
 
     try {
-      await fetch("http://localhost:5000/api/leads", {
+      const response = await fetch("https://api.coworkspaze.com/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
+
+      if (!response.ok) {
+        throw new Error("Failed to submit lead");
+      }
+
+      setShowSuccess(true);
 
       setFormData({
         name: "",
@@ -40,8 +67,10 @@ export default function HeroLeadForm() {
         spaceType: "",
         city: "",
       });
+
     } catch (error) {
       console.error("Error submitting lead:", error);
+      setError("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -70,6 +99,13 @@ export default function HeroLeadForm() {
         </p>
 
         <div className="space-y-3">
+
+          {error && (
+            <div className="text-red-300 text-sm">
+              {error}
+            </div>
+          )}
+
           <input
             name="name"
             value={formData.name}
@@ -123,7 +159,6 @@ export default function HeroLeadForm() {
         </div>
       </motion.div>
 
-      {/* SUCCESS POPUP */}
       {showSuccess && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl p-8 text-center">
