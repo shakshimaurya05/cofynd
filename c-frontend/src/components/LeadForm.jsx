@@ -28,7 +28,7 @@ export default function LeadForm() {
     setShowSuccess(true);
 
     try {
-      await fetch("http://localhost:5000/api/leads", {
+      await fetch("https://api.coworkspaze.com/api/leads", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
