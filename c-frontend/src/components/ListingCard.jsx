@@ -1,7 +1,7 @@
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { useState } from "react";
 import { FaTimes } from "react-icons/fa";
-import GetQuote from "./getQuote.jsx";
+import GetQuote from "./GetQuote.jsx";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 

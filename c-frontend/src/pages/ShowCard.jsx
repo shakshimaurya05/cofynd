@@ -3,7 +3,7 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
-import GetQuote from "../components/getQuote";
+import GetQuote from "../components/GetQuote";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { FaTimes, FaCheckCircle, FaEnvelope } from "react-icons/fa";
+import API_URL from "../config";
 
 export default function ContactModal({ onClose }) {
   const [showSuccess, setShowSuccess] = useState(false);
@@ -46,14 +47,10 @@ export default function ContactModal({ onClose }) {
     setLoading(true);
 
     try {
-      const response = await fetch("https://api.coworkspaze.com/api/leads", {
+      const response = await fetch(`${API_URL}/leads`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...form,
-          spaceType: form.spaceType || "general",
-          city: form.city || "india",
-        }),
+        body: JSON.stringify(form),
       });
 
       if (!response.ok) {
@@ -140,6 +137,7 @@ export default function ContactModal({ onClose }) {
 
               <input
                 placeholder="Full Name"
+                value={form.name}
                 className="w-full bg-transparent border border-white/40 rounded-lg px-4 py-2 text-white placeholder-white/60 focus:outline-none focus:border-white"
                 onChange={(e) =>
                   setForm({ ...form, name: e.target.value })
@@ -148,6 +146,7 @@ export default function ContactModal({ onClose }) {
 
               <input
                 placeholder="Email Address"
+                value={form.email}
                 className="w-full bg-transparent border border-white/40 rounded-lg px-4 py-2 text-white placeholder-white/60 focus:outline-none focus:border-white"
                 onChange={(e) =>
                   setForm({ ...form, email: e.target.value })
@@ -156,6 +155,7 @@ export default function ContactModal({ onClose }) {
 
               <input
                 placeholder="Mobile Number"
+                value={form.phone}
                 className="w-full bg-transparent border border-white/40 rounded-lg px-4 py-2 text-white placeholder-white/60 focus:outline-none focus:border-white"
                 onChange={(e) =>
                   setForm({ ...form, phone: e.target.value })
@@ -164,6 +164,7 @@ export default function ContactModal({ onClose }) {
 
               <div className="grid grid-cols-2 gap-3">
                 <select
+                  value={form.spaceType}
                   className="bg-transparent border border-white/40 rounded-lg px-3 py-2 text-sm text-white focus:outline-none"
                   onChange={(e) =>
                     setForm({ ...form, spaceType: e.target.value })
@@ -178,6 +179,7 @@ export default function ContactModal({ onClose }) {
                 </select>
 
                 <select
+                  value={form.city}
                   className="bg-transparent border border-white/40 rounded-lg px-3 py-2 text-sm text-white focus:outline-none"
                   onChange={(e) =>
                     setForm({ ...form, city: e.target.value })
@@ -186,7 +188,7 @@ export default function ContactModal({ onClose }) {
                   <option value="" className="text-black">
                     Preferred City
                   </option>
-                  <option value="gurgaon" className="text-black ">
+                  <option value="Gurugram" className="text-black">
                     Gurugram
                   </option>
                 </select>

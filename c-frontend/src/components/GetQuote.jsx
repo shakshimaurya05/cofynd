@@ -1,4 +1,5 @@
 import { useState } from "react";
+import API_URL from "../config";
 
 export default function GetQuote({ spaceTitle, spaceLocation }) {
   const [formData, setFormData] = useState({
@@ -48,10 +49,9 @@ export default function GetQuote({ spaceTitle, spaceLocation }) {
 
     setLoading(true);
     setError("");
-    setShowSuccess(true);
 
     try {
-      await fetch("https://api.coworkspaze.com/api/quotes", {
+      const response = await fetch(`${API_URL}/quotes`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -61,7 +61,11 @@ export default function GetQuote({ spaceTitle, spaceLocation }) {
         }),
       });
 
-      // reset form
+      if (!response.ok) {
+        throw new Error("Failed to submit");
+      }
+
+      setShowSuccess(true);
       setFormData({
         name: "",
         email: "",
@@ -69,8 +73,8 @@ export default function GetQuote({ spaceTitle, spaceLocation }) {
         type: "",
         seats: "",
       });
-    } catch (error) {
-      console.error("Error submitting quote:", error);
+    } catch (err) {
+      setError("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }

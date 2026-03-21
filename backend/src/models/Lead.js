@@ -16,8 +16,11 @@ const leadSchema = new mongoose.Schema({
   city : {
     type : String,
     required : true
+  },
+  spaceType : {
+    type : String,
+    default : ''
   }
-
 },
 {
   timestamps : true
