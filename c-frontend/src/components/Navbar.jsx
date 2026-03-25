@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import logo from "../assets/logos/mainLogo2.png"
 import { AnimatePresence } from "framer-motion";
+import VirtualOfficeModal from "./VirtualOfficeModal";
 import {
   FaSearch,
   FaChevronDown,
@@ -12,13 +13,52 @@ import {
 import { useNavigate } from "react-router-dom";
 import ContactModal from "./ContactModal";
 
+import gurgaonImg from "../assets/cities/gurgaon.jpg"; 
+import bangaloreImg from "../assets/cities/banglore.jpg"; 
+import mumbaiImg from "../assets/cities/mumbai.jpg"; 
+import hyderabadImg from "../assets/cities/hyderabad.webp"; 
+import puneImg from "../assets/cities/pune.jpg"; 
+import delhiImg from "../assets/cities/delhi.jpg"; 
+import noidaImg from "../assets/cities/noida.avif"; 
+import ahmedabadImg from "../assets/cities/ahemdabad.jpg"; 
+import indoreImg from "../assets/cities/indore.jpg"; 
+import chennaiImg from "../assets/cities/chennai.jpg"; 
+import kochiImg from "../assets/cities/kochi.jpg"; 
+import jaipurImg from "../assets/cities/jaipur.jpg"; 
+import bhubaneswarImg from "../assets/cities/bhubhnasewar.jpg";
+import coimbatoreImg from "../assets/cities/coimbatore.webp"; 
+import chandigarhImg from "../assets/cities/chandigarh.jpg"; 
+import goaImg from "../assets/cities/goa.jpg"; 
+import kolkataImg from "../assets/cities/kolkata.webp";
+import lucknowImg from "../assets/cities/lucknow.jpg";
+
+
+const cities = [ { name: "Gurugram", img: gurgaonImg },
+   { name: "Bangalore", img: bangaloreImg },
+    { name: "Mumbai", img: mumbaiImg },
+     { name: "Hyderabad", img: hyderabadImg }, 
+     { name: "Pune", img: puneImg }, 
+     { name: "Delhi", img: delhiImg }, 
+     { name: "Noida", img: noidaImg }, 
+     { name: "Ahmedabad", img: ahmedabadImg }, 
+     { name: "Indore", img: indoreImg }, 
+     { name: "Chennai", img: chennaiImg }, 
+     { name: "Kochi", img: kochiImg }, 
+     { name: "Jaipur", img: jaipurImg }, 
+     { name: "Bhubaneswar", img: bhubaneswarImg }, 
+     { name: "Coimbatore", img: coimbatoreImg }, 
+     { name: "Chandigarh", img: chandigarhImg },
+     { name: "Goa", img: goaImg }, 
+     { name: "Lucknow", img:lucknowImg},
+     { name: "Kolkata", img: kolkataImg }, ];
+
 export default function Navbar() {
   const navigate = useNavigate();
 
   const [openMenu, setOpenMenu] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [showContact, setShowContact] = useState(false);
-
+const [showVirtual, setShowVirtual] = useState(false);
   useEffect(() => {
     const closeMenu = () => setOpenMenu(null);
     document.addEventListener("click", closeMenu);
@@ -30,6 +70,7 @@ export default function Navbar() {
     setOpenMenu(null);
     setMobileOpen(false);
   };
+  
 
   return (
     <nav className="w-full bg-white border-b sticky top-0 z-50">
@@ -94,7 +135,12 @@ export default function Navbar() {
               </div>
             )}
           </div>
-
+         <button
+  onClick={() => setShowVirtual(true)}
+  className="hover:text-blue-800"
+>
+  Virtual Office
+</button>
           <button
             onClick={() => setShowContact(true)}
             className="border px-4 py-2 rounded-full hover:bg-gray-50"
@@ -118,6 +164,7 @@ export default function Navbar() {
 
           <div className="font-semibold">Coworking</div>
 
+
           <div
             className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer pl-2"
             onClick={handleNavigate}
@@ -125,6 +172,15 @@ export default function Navbar() {
             <FaMapMarkerAlt />
             Gurugram
           </div>
+          <button
+  onClick={() => {
+    setShowVirtual(true);
+    setMobileOpen(false); // close menu after click
+  }}
+  className="w-full text-left text-sm font-medium"
+>
+  Virtual Office
+</button>
 
           <button
             onClick={() => {
@@ -150,6 +206,15 @@ export default function Navbar() {
         <ContactModal onClose={() => setShowContact(false)} />
       )}
       </AnimatePresence>
+      <AnimatePresence>
+  {showVirtual && (
+    <VirtualOfficeModal
+      cities={cities}
+      onClose={() => setShowVirtual(false)}
+      navigate={navigate}
+    />
+  )}
+</AnimatePresence>
     </nav>
   );
 }

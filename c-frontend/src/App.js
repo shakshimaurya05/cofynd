@@ -3,9 +3,10 @@ import ListProperty from "./pages/ListProperty";
 import Signup from "./pages/Signup";
 import Home from "./pages/Home";
 import Coworking from "./pages/Coworking";
-
+import VirtualOfficePage from "./pages/VirtualOffice/VirtualOficePage";
 import Login from "./pages/Login"
 import ShowCard from "./pages/ShowCard";
+
 function App() {
   return (
     <Routes>
@@ -19,6 +20,7 @@ function App() {
 <Route path="/login" element={<Login />} />
 
 <Route path="/space/:id" element={<ShowCard />} />
+<Route path="/virtual-office/:city" element={<VirtualOfficePage />} />
     </Routes>
   );
 }
