@@ -1,4 +1,6 @@
-const BASE_URL = "https://api.coworkspaze.com/api/spaces";
+import API_URL from '../config';
+
+const BASE_URL = `${API_URL}/spaces`;
 
 const optimizeCloudinaryUrl = (url) => {
   if (!url || !url.includes("cloudinary")) return url;
@@ -23,6 +25,7 @@ export async function fetchSpaces({ city, page = 1, limit = 20 }) {
   url += `?page=${page}&limit=${limit}`;
 
   const res = await fetch(url);
+  if (!res.ok) throw new Error("Failed to fetch spaces");
   const data = await res.json();
 
   // Handle paginated response
@@ -46,6 +49,7 @@ export async function fetchSpacesByLocation({
   const url = `${BASE_URL}/city/${city}/microLocation/${encodeURIComponent(microLocation)}?page=${page}&limit=${limit}`;
 
   const res = await fetch(url);
+  if (!res.ok) throw new Error("Failed to fetch spaces by location");
   const data = await res.json();
 
   if (data.spaces) {

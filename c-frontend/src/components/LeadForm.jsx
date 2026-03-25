@@ -1,6 +1,7 @@
 import propertyImg from "../assets/hero1.webp";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import API_URL from "../config";
 
 export default function LeadForm() {
   const [formData, setFormData] = useState({
@@ -12,23 +13,25 @@ export default function LeadForm() {
   });
 
   const [showSuccess, setShowSuccess] = useState(false);
-  const [loading, setLoading] = useState(false); //  important
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
+    setError("");
   };
 
   const handleSubmit = async () => {
-    if (loading) return; //  prevent double click
+    if (loading) return;
 
     setLoading(true);
-    setShowSuccess(true);
+    setError("");
 
     try {
-      await fetch("https://api.coworkspaze.com/api/leads", {
+      const response = await fetch(`${API_URL}/leads`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -36,7 +39,11 @@ export default function LeadForm() {
         body: JSON.stringify(formData),
       });
 
-      // reset form
+      if (!response.ok) {
+        throw new Error("Failed to submit");
+      }
+
+      setShowSuccess(true);
       setFormData({
         name: "",
         email: "",
@@ -44,8 +51,8 @@ export default function LeadForm() {
         spaceType: "",
         city: "",
       });
-    } catch (error) {
-      console.error("Error submitting lead:", error);
+    } catch (err) {
+      setError("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -69,6 +76,10 @@ export default function LeadForm() {
             <p className="text-gray-500 mt-2">
               Connect with a Cowork Spaze Expert today
             </p>
+
+            {error && (
+              <div className="text-red-600 text-sm mt-4">{error}</div>
+            )}
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
               <input
@@ -102,7 +113,7 @@ export default function LeadForm() {
                 className="border rounded-full px-5 py-3"
               >
                 <option value="">Select City</option>
-                <option value="gurgaon">Gurugram</option>
+                <option value="Gurugram">Gurugram</option>
               </select>
 
               <button

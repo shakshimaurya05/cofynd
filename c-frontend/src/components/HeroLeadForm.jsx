@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import API_URL from "../config";
 
 export default function HeroLeadForm() {
   const [formData, setFormData] = useState({
@@ -48,7 +49,7 @@ export default function HeroLeadForm() {
     setLoading(true);
 
     try {
-      const response = await fetch("https://api.coworkspaze.com/api/leads", {
+      const response = await fetch(`${API_URL}/leads`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -139,7 +140,7 @@ export default function HeroLeadForm() {
             <option value="" className="text-black">
               Select City
             </option>
-            <option value="gurgaon" className="text-black">
+            <option value="Gurugram" className="text-black">
               Gurugram
             </option>
           </select>

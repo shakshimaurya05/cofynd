@@ -1,27 +1,40 @@
-import { Routes, Route } from "react-router-dom";
-import ListProperty from "./pages/ListProperty";
-import Signup from "./pages/Signup";
-import Home from "./pages/Home";
-import Coworking from "./pages/Coworking";
-import VirtualOfficePage from "./pages/VirtualOffice/VirtualOficePage";
-import Login from "./pages/Login"
-import ShowCard from "./pages/ShowCard";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { lazy, Suspense } from "react";
+import ErrorBoundary from "./components/ErrorBoundary";
+
+const Home = lazy(() => import("./pages/Home"));
+const Coworking = lazy(() => import("./pages/Coworking"));
+const ListProperty = lazy(() => import("./pages/ListProperty"));
+const Signup = lazy(() => import("./pages/Signup"));
+const Login = lazy(() => import("./pages/Login"));
+const ShowCard = lazy(() => import("./pages/ShowCard"));
+const VirtualOfficePage = lazy(() => import("./pages/VirtualOffice/VirtualOficePage"));
+
+function PageLoader() {
+  return (
+    <div className="min-h-[60vh] flex items-center justify-center">
+      <p className="text-gray-500">Loading...</p>
+    </div>
+  );
+}
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-     <Route path="/coworking" element={<Coworking />} />
-<Route path="/coworking/:city" element={<Coworking />} />
-
-<Route path="/list-your-property" element={<ListProperty/>}/>
-
-<Route path="/signup" element={<Signup />} />
-<Route path="/login" element={<Login />} />
-
-<Route path="/space/:id" element={<ShowCard />} />
-<Route path="/virtual-office/:city" element={<VirtualOfficePage />} />
-    </Routes>
+    <ErrorBoundary>
+      <Suspense fallback={<PageLoader />}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/coworking" element={<Coworking />} />
+          <Route path="/coworking/:city" element={<Coworking />} />
+          <Route path="/list-your-property" element={<ListProperty />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/space/:id" element={<ShowCard />} />
+          <Route path="/virtual-office/:city" element={<VirtualOfficePage />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Suspense>
+    </ErrorBoundary>
   );
 }
 
