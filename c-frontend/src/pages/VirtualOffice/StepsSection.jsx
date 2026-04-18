@@ -1,22 +1,22 @@
 import { motion } from "framer-motion";
-import { MapPin, FileText, Rocket } from "lucide-react";
+import { FaFileAlt, FaMapMarkerAlt, FaRocket } from "react-icons/fa";
 import { useState } from "react";
 import QuoteModal from "./QuoteModal";
 const steps = [
   {
     title: "Choose Location",
     desc: "Select a prime business location for your company.",
-    icon: <MapPin size={26} />,
+    icon: <FaMapMarkerAlt size={26} />,
   },
   {
     title: "Submit Documents",
     desc: "Upload your documents quickly and securely.",
-    icon: <FileText size={26} />,
+    icon: <FaFileAlt size={26} />,
   },
   {
     title: "Start Business",
     desc: "Get your virtual office completely ready and go live.",
-    icon: <Rocket size={26} />,
+    icon: <FaRocket size={26} />,
   },
 ];
 

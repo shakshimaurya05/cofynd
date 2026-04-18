@@ -208,7 +208,7 @@ export default function ContactModal({ onClose }) {
 
             <div className="mt-6 flex items-center gap-2 text-sm text-white/70">
               <FaEnvelope />
-              <span>coworkspaze@gmail.com</span>
+              <span>info@coworkspaze.com</span>
             </div>
           </div>
         </div>

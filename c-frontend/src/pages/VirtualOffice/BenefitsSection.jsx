@@ -1,27 +1,32 @@
 import { motion } from "framer-motion";
-import { Briefcase, MapPin, IndianRupee, Zap } from "lucide-react";
+import {
+  FaBolt,
+  FaBriefcase,
+  FaMapMarkerAlt,
+  FaRupeeSign,
+} from "react-icons/fa";
 import { useState } from "react";
 import QuoteModal from "./QuoteModal";
 const benefits = [
   {
     title: "GST Registration",
     desc: "Use a valid business address for GST and company registration without needing a physical office.",
-    icon: <Briefcase size={28} />,
+    icon: <FaBriefcase size={28} />,
   },
   {
     title: "Professional Address",
     desc: "Enhance your brand image with a premium address in prime business locations.",
-    icon: <MapPin size={28} />,
+    icon: <FaMapMarkerAlt size={28} />,
   },
   {
     title: "Low Cost Setup",
     desc: "Avoid high rentals and operational costs while maintaining a strong business presence.",
-    icon: <IndianRupee size={28} />,
+    icon: <FaRupeeSign size={28} />,
   },
   {
     title: "Business Flexibility",
     desc: "Operate your business from anywhere while maintaining a credible office presence.",
-    icon: <Zap size={28} />,
+    icon: <FaBolt size={28} />,
   },
 ];
 

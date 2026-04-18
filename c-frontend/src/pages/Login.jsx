@@ -18,7 +18,7 @@ export default function ListProperty() {
           {/* LEFT CONTENT */}
           <div className="flex flex-col justify-center">
             <h1 className="text-3xl font-semibold mb-4">
-              List Your Property With Cofynd.
+              List Your Property With CoworkSpaze.
             </h1>
 
             <ul className="space-y-3 text-gray-700">
@@ -88,7 +88,7 @@ export default function ListProperty() {
                 <FaPhoneAlt /> +91 935 528 9999
               </p>
               <p className="text-sm text-gray-600 flex items-center gap-2">
-                <FaEnvelope /> hello@cofynd.com
+                <FaEnvelope /> info@coworkspaze.com
               </p>
             </div>
 

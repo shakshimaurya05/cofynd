@@ -106,8 +106,8 @@ const [showVirtual, setShowVirtual] = useState(false);
           onClick={(e) => e.stopPropagation()}
         >
           {/* EMAIL */}
-         <a href="mailto:coworkspaze@gmail.com">
-  coworkspaze@gmail.com |
+         <a href="mailto:info@coworkspaze.com">
+  info@coworkspaze.com |
 </a>
 
 
@@ -195,7 +195,7 @@ const [showVirtual, setShowVirtual] = useState(false);
           
 
           <div className="text-center text-sm text-gray-500">
-            coworkspaze@gmail.com
+            info@coworkspaze.com
           </div>
         </div>
       )}

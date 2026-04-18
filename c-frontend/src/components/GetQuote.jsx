@@ -19,13 +19,12 @@ export default function GetQuote({ spaceTitle, spaceLocation }) {
       ...formData,
       [e.target.name]: e.target.value,
     });
-    setError(""); // Clear error on change
+    setError("");
   };
 
   const handleSubmit = async () => {
     if (loading) return;
 
-    // Validate all fields
     if (!formData.name.trim()) {
       setError("Name is required");
       return;
@@ -82,7 +81,6 @@ export default function GetQuote({ spaceTitle, spaceLocation }) {
 
   return (
     <>
-      {/* CARD */}
       <div
         className="
           bg-gradient-to-b from-blue-50 to-blue-100
@@ -92,7 +90,6 @@ export default function GetQuote({ spaceTitle, spaceLocation }) {
           max-w-md w-full
         "
       >
-        {/* HEADER */}
         <h3 className="text-xl font-semibold text-center">
           Are you interested in this property?
         </h3>
@@ -100,11 +97,10 @@ export default function GetQuote({ spaceTitle, spaceLocation }) {
           Fill your details for a customized quote
         </p>
 
-        {/* FORM */}
         <div className="mt-6 space-y-4">
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm">
-              ⚠️ {error}
+              {error}
             </div>
           )}
 
@@ -132,7 +128,6 @@ export default function GetQuote({ spaceTitle, spaceLocation }) {
             className="w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
 
-          {/* TYPE & SEATS */}
           <div className="grid grid-cols-2 gap-4">
             <select
               name="type"
@@ -152,14 +147,13 @@ export default function GetQuote({ spaceTitle, spaceLocation }) {
               className="border rounded-xl px-4 py-3 text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
             >
               <option value="">No. of Seats</option>
-              <option value="1-20">1 – 20</option>
-              <option value="20-50">20 – 50</option>
-              <option value="50-100">50 – 100</option>
+              <option value="1-20">1 - 20</option>
+              <option value="20-50">20 - 50</option>
+              <option value="50-100">50 - 100</option>
               <option value="100+">100+</option>
             </select>
           </div>
 
-          {/* CTA */}
           <button
             disabled={loading}
             onClick={handleSubmit}
@@ -174,18 +168,16 @@ export default function GetQuote({ spaceTitle, spaceLocation }) {
           </button>
         </div>
 
-        {/* FOOTER */}
         <div className="mt-6 text-center border-t pt-4">
           <p className="text-sm font-medium">
             Connect with our space expert
           </p>
           <p className="text-sm text-blue-600">
-            coworkspaze@gmail.com
+            info@coworkspaze.com
           </p>
         </div>
       </div>
 
-      {/* SUCCESS POPUP */}
       {showSuccess && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl p-8 text-center max-w-sm">

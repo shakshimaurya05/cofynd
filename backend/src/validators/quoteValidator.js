@@ -12,7 +12,10 @@ const validateQuote = [
   body('phone')
     .trim()
     .notEmpty().withMessage('Phone is required')
-    .matches(/^[+]?[\d\s-]{7,15}$/).withMessage('Invalid phone number'),
+    .matches(/^[+]?[\d\s-]{7,15}$/).withMessage('Invalid phone number'), /* whole regex here means : 
+    phone may start with +(optional), can contain digits,spaces, hyphen(-) & length of phone no. must be 
+    between 7-15 chars
+    */
   body('type')
     .optional()
     .trim()

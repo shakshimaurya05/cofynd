@@ -72,7 +72,7 @@ export default function FeaturedAndCTA() {
 
                 <div className="flex items-center gap-2">
                   <FaEnvelope className="text-sm" />
-                  <span>coworkspaze@gmail.com</span>
+                  <span>info@coworkspaze.com</span>
                 </div>
               </div>
             </div>
